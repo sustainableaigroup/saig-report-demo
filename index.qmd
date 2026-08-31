@@ -1,0 +1,174 @@
+---
+pagetitle: "AI Environmental Impact Assessment"
+format-links:
+  - format: typst
+    text: Download PDF
+    icon: file-pdf
+---
+
+```{=html}
+<div class="saig-cover">
+  <div>
+    <div class="saig-logo-card"><img src="assets/saig-logo.png" alt="Sustainable AI Group"></div>
+    <div class="saig-kicker" style="margin-top:3.2rem;">Technical report / demonstration</div>
+    <h1>AI Environmental<br>Impact Assessment</h1>
+    <div class="subtitle">A boilerplate report showing how SAIG can combine a polished web experience, hoverable references, technical graphics, and a one-click Typst PDF from the same Quarto source.</div>
+    <a class="pdf-button" href="index.pdf">↓ Download PDF</a>
+  </div>
+  <div class="saig-cover-meta">
+    <span>CLIENT: DEMONSTRATION</span><span>VERSION: 0.1</span><span>31 AUGUST 2026</span>
+  </div>
+</div>
+```
+
+```{=typst}
+#align(left)[
+  #image("assets/saig-logo.png", width: 2.45in)
+  #v(0.55in)
+  #text(font: "DM Mono", size: 8pt, tracking: 0.8pt, fill: rgb("#4F747D"))[TECHNICAL REPORT / DEMONSTRATION]
+  #v(0.22in)
+  #text(font: "Inter", size: 30pt, weight: "medium", fill: rgb("#B8663B"))[AI Environmental Impact Assessment]
+  #v(0.18in)
+  #text(font: "DM Sans", size: 13pt, fill: rgb("#2B6572"))[A boilerplate report demonstrating a shared Quarto source for a polished web report and Typst PDF.]
+  #v(0.45in)
+  #line(length: 100%, stroke: 2pt + rgb("#55BAC0"))
+  #v(0.38in)
+  #image("assets/brand-gradient.png", width: 100%, height: 2.45in, fit: "cover")
+  #v(0.46in)
+  #grid(columns: (1fr, 1fr, 1fr), gutter: 12pt,
+    [#text(font: "DM Mono", size: 8pt, fill: rgb("#4F747D"))[CLIENT]\#text(font: "DM Sans", size: 10pt)[Demonstration]],
+    [#text(font: "DM Mono", size: 8pt, fill: rgb("#4F747D"))[VERSION]\#text(font: "DM Sans", size: 10pt)[0.1]],
+    [#text(font: "DM Mono", size: 8pt, fill: rgb("#4F747D"))[DATE]\#text(font: "DM Sans", size: 10pt)[31 August 2026]]
+  )
+]
+#pagebreak()
+```
+
+# Executive summary
+
+::: {.lede}
+This is intentionally **illustrative content**, not a client analysis. Its purpose is to show the reporting system: one source file, technical visuals, source citations, a polished web layer, and a publication-quality PDF.
+:::
+
+AI training and deployment occur primarily in data centres, making electricity demand and data-centre infrastructure central to environmental assessment [@iea2025]. Research also shows that inference impacts can vary substantially across model and task choices [@luccioni2024]. A defensible assessment therefore needs to connect **AI activity → compute → energy → location → emissions**, while documenting assumptions and uncertainty.
+
+```{=html}
+<div class="kpi-grid">
+  <div class="kpi"><div class="value">1 source</div><div class="label">Quarto Markdown</div></div>
+  <div class="kpi"><div class="value">2 outputs</div><div class="label">HTML + Typst PDF</div></div>
+  <div class="kpi"><div class="value">∞ versions</div><div class="label">Git tracked</div></div>
+</div>
+```
+
+| Demonstrated capability | Web report | PDF |
+|---|:---:|:---:|
+| SAIG typography and colors | ✓ | ✓ |
+| Hoverable citations | ✓ | — |
+| Numbered bibliography | ✓ | ✓ |
+| Technical SVG figures | ✓ | ✓ |
+| Equations and cross-references | ✓ | ✓ |
+| One-click PDF access | ✓ | n/a |
+
+::: {.callout-note title="What is real vs. illustrative?"}
+The sources and general methodological statements are real. All numerical findings in this demo are placeholders created solely to exercise the design system.^[For an actual engagement, these values would be generated from client activity data, model/hardware characterization, data-centre factors, and location-specific electricity data.]
+:::
+
+# Measurement approach
+
+A useful reporting architecture separates **activity data** from **impact factors**. For inference, a simplified calculation can be expressed as:
+
+$$
+E_{\text{inference}} = A_{\text{tokens}} \times I_{\text{model}} \times PUE
+$$ {#eq-energy}
+
+and operational emissions as:
+
+$$
+GHG_{\text{operational}} = E_{\text{inference}} \times CI_{\text{electricity}}
+$$ {#eq-ghg}
+
+This is deliberately simplified: a production methodology would define boundaries, allocation rules, hardware utilization, uncertainty, and the treatment of embodied impacts. GHG Protocol principles emphasize relevance, completeness, consistency, transparency, and accuracy when constructing emissions inventories [@ghgscope3].
+
+::: {.figure-frame}
+![Illustrative measurement chain from AI activity to emissions.](assets/methodology-flow.svg){#fig-boundary width=100%}
+:::
+
+Table @tbl-boundary shows how a report can make assumptions explicit rather than burying them in prose.
+
+| Layer | Example input | Typical evidence | Demo treatment |
+|---|---|---|---|
+| AI activity | tokens, requests, GPU-hours | platform logs, vendor exports | In scope |
+| Model / hardware | model family, accelerator | provider disclosure, benchmark | In scope |
+| Data-centre overhead | PUE, cooling allocation | facility/provider data | Assumption |
+| Electricity | regional grid mix | grid datasets, contractual instruments | In scope |
+| Embodied impacts | hardware + construction | LCA / supplier data | Separate module |
+
+: Measurement boundary and evidence hierarchy {#tbl-boundary}
+
+# Illustrative findings
+
+The figure below is intentionally synthetic, but demonstrates how a result can be presented in a way that works identically in browser and PDF.
+
+::: {.figure-frame}
+![Illustrative normalized inference energy index. Values are not measured findings.](assets/energy-index.svg){#fig-energy width=100%}
+:::
+
+A result like Figure @fig-energy would normally be accompanied by a traceable evidence table and sensitivity analysis. The underlying idea is supported by empirical research showing material differences in deployment energy across tasks and model architectures [@luccioni2024].
+
+> **Design principle:** the executive reader should be able to understand the decision in thirty seconds; the technical reviewer should be able to trace every material assumption.
+
+## Example sensitivity table
+
+| Scenario | Normalized energy | Grid intensity (gCO₂e/kWh) | Resulting index |
+|---|---:|---:|---:|
+| Baseline frontier model | 1.00 | 400 | 1.00 |
+| Routed model mix | 0.68 | 400 | 0.68 |
+| Routed + lower-carbon region | 0.68 | 120 | 0.20 |
+| Task-specific model | 0.21 | 400 | 0.21 |
+
+The point of the table is not the sample values. It is the **reporting pattern**: inputs are visible, results are comparable, and the reader can distinguish model-efficiency effects from electricity-location effects.
+
+# Recommendations
+
+For a client-facing version, recommendations can be organized by decision horizon rather than by technical subsystem.
+
+### 1. Establish a repeatable measurement baseline
+
+Define the activity-data schema, model taxonomy, data-quality hierarchy, and evidence retention requirements. This creates a consistent baseline that can be updated without rebuilding the analysis from scratch.
+
+### 2. Prioritize the highest-leverage routing decisions
+
+Use model- and task-level measurements to identify where a smaller or more specialized model can satisfy quality requirements at lower energy intensity. Research on deployment impacts suggests these choices can materially affect inference energy [@luccioni2024].
+
+### 3. Integrate results into corporate reporting
+
+Map material upstream AI-related emissions into the organization's established GHG accounting process, with explicit boundaries, assumptions, and exclusions consistent with applicable reporting practices [@ghgscope3].
+
+::: {.callout-tip title="Why GitHub helps"}
+Every methodological change, source update, chart revision, and client comment can be reviewed as a diff. The published HTML and PDF can then be regenerated automatically from the approved source.
+:::
+
+# Technical notes
+
+## What the source tree controls
+
+`_brand.yml`
+: Cross-format SAIG colors, logos, and typography.
+
+`styles.scss`
+: Web-only polish: hero treatment, KPI cards, spacing, responsive behavior, and table details.
+
+`typst/saig-header.typ`
+: PDF-only page-level treatment such as headers and footers.
+
+`references.bib`
+: Central bibliography. Cite a source with `[@source-key]`; the browser version exposes the reference on hover.
+
+`assets/`
+: Brand-approved logo/background assets plus reusable SVG graphics.
+
+## Production notes
+
+For a real report, numerical outputs should come from a reproducible data pipeline rather than manually entered tables. Quarto can execute Python or R during render, but keeping calculations separate from the layout layer is often useful for review and assurance.
+
+# References {.unnumbered}
