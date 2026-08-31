@@ -1,15 +1,24 @@
+#let saig-header = context [
+  #set text(font: "DM Mono", size: 6.6pt, fill: rgb("#4F747D"))
+  #grid(
+    columns: (1fr, 1fr, 1fr),
+    align(left)[Sustainable AI Group],
+    align(center)[TECHNICAL REPORT DEMO],
+    align(right)[Page #counter(page).display("1")]
+  )
+  #v(5pt)
+  #line(length: 100%, stroke: 0.55pt + rgb("#E6ECED"))
+]
+
+#let saig-footer = context [
+  #set text(font: "DM Mono", size: 5.9pt, fill: rgb("#819CA2"))
+  Illustrative content - not a client analysis
+]
+
 #set page(
-  header: context [
-    #set text(font: "DM Mono", size: 7.2pt, fill: rgb("#4F747D"))
-    Sustainable AI Group
-    #h(1fr)
-    Technical Report Demo
-  ],
-  footer: context [
-    #set text(font: "DM Mono", size: 7pt, fill: rgb("#819CA2"))
-    Demonstration report - illustrative content
-    #h(1fr)
-    #counter(page).display("1")
-  ]
+  header: saig-header,
+  footer: saig-footer,
+  numbering: none,
 )
-#set par(justify: true, leading: 0.65em)
+
+#set par(justify: false, leading: 0.72em)

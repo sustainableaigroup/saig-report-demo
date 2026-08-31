@@ -22,33 +22,107 @@ format-links:
 ```
 
 ```{=typst}
-#align(left)[
-  #image("assets/saig-logo.png", width: 2.45in)
-  #v(0.55in)
-  #text(font: "DM Mono", size: 8pt, tracking: 0.8pt, fill: rgb("#4F747D"))[TECHNICAL REPORT / DEMONSTRATION]
-  #v(0.22in)
-  #text(font: "Inter", size: 30pt, weight: "medium", fill: rgb("#B8663B"))[AI Environmental Impact Assessment]
-  #v(0.18in)
-  #text(font: "DM Sans", size: 13pt, fill: rgb("#2B6572"))[A boilerplate report demonstrating a shared Quarto source for a polished web report and Typst PDF.]
-  #v(0.45in)
-  #line(length: 100%, stroke: 2pt + rgb("#55BAC0"))
-  #v(0.38in)
-  #image("assets/brand-gradient.png", width: 100%, height: 2.45in, fit: "cover")
-  #v(0.46in)
-  #grid(columns: (1fr, 1fr, 1fr), gutter: 12pt,
-    [#text(font: "DM Mono", size: 8pt, fill: rgb("#4F747D"))[CLIENT]\#text(font: "DM Sans", size: 10pt)[Demonstration]],
-    [#text(font: "DM Mono", size: 8pt, fill: rgb("#4F747D"))[VERSION]\#text(font: "DM Sans", size: 10pt)[0.1]],
-    [#text(font: "DM Mono", size: 8pt, fill: rgb("#4F747D"))[DATE]\#text(font: "DM Sans", size: 10pt)[31 August 2026]]
-  )
+#set page(margin: 0pt, header: none, footer: none, numbering: none)
+
+#place(top + left, dx: 0pt, dy: 0pt)[
+  #image("assets/pdf-cover-bg.png", width: 8.5in, height: 11in, fit: "cover")
 ]
+
+#place(top + left, dx: 0.52in, dy: 0.66in)[
+  #block(width: 2.85in, height: 0.78in, fill: white, radius: 10pt, inset: 10pt)[
+    #image("assets/saig-logo.png", width: 2.28in)
+  ]
+]
+
+#place(top + left, dx: 0.58in, dy: 2.20in)[
+  #text(font: "DM Mono", size: 7.5pt, tracking: 0.8pt, fill: white)[TECHNICAL REPORT / DEMONSTRATION]
+]
+
+#place(top + left, dx: 0.58in, dy: 3.03in)[
+  #text(font: "Inter", size: 36pt, weight: "medium", fill: white)[AI Environmental]
+]
+#place(top + left, dx: 0.58in, dy: 3.66in)[
+  #text(font: "Inter", size: 36pt, weight: "medium", fill: white)[Impact Assessment]
+]
+
+#place(top + left, dx: 0.58in, dy: 4.48in)[
+  #block(width: 6.90in)[
+    #set par(leading: 0.72em)
+    #text(font: "DM Sans", size: 13pt, fill: rgb("#F4F8F8"))[
+      A boilerplate report showing how SAIG can combine a polished web experience, hoverable references, technical graphics, and a one-click Typst PDF from the same Quarto source.
+    ]
+  ]
+]
+
+#place(top + left, dx: 0.58in, dy: 9.20in)[
+  #block(width: 7.34in, height: 0.98in, fill: white, radius: 11pt, inset: 14pt)[
+    #grid(
+      columns: (1fr, 1fr, 1fr),
+      gutter: 14pt,
+      [#text(font: "DM Mono", size: 6.5pt, fill: rgb("#4F747D"))[CLIENT]],
+      [#text(font: "DM Mono", size: 6.5pt, fill: rgb("#4F747D"))[VERSION]],
+      [#text(font: "DM Mono", size: 6.5pt, fill: rgb("#4F747D"))[DATE]],
+    )
+    #v(5pt)
+    #grid(
+      columns: (1fr, 1fr, 1fr),
+      gutter: 14pt,
+      [#text(font: "DM Sans", size: 10.5pt, weight: "medium", fill: rgb("#033845"))[DEMONSTRATION]],
+      [#text(font: "DM Sans", size: 10.5pt, weight: "medium", fill: rgb("#033845"))[0.1]],
+      [#text(font: "DM Sans", size: 10.5pt, weight: "medium", fill: rgb("#033845"))[31 AUGUST 2026]],
+    )
+  ]
+]
+
 #pagebreak()
+#set page(
+  margin: (top: 0.72in, bottom: 0.72in, left: 0.62in, right: 0.62in),
+  header: saig-header,
+  footer: saig-footer,
+  numbering: none,
+)
+
+#show heading.where(level: 1): it => block(above: 10pt, below: 14pt)[
+  #text(font: "Inter", size: 25pt, weight: "medium", fill: rgb("#B8663B"))[#it.body]
+]
+#show heading.where(level: 2): it => block(above: 12pt, below: 8pt)[
+  #text(font: "Inter", size: 15pt, weight: "medium", fill: rgb("#2B6572"))[#it.body]
+]
+#show heading.where(level: 3): it => block(above: 9pt, below: 5pt)[
+  #text(font: "Inter", size: 11.5pt, weight: "medium", fill: rgb("#2B6572"))[#it.body]
+]
 ```
+
 
 # Executive summary
 
 ::: {.lede}
 This is intentionally **illustrative content**, not a client analysis. Its purpose is to show the reporting system: one source file, technical visuals, source citations, a polished web layer, and a publication-quality PDF.
 :::
+
+
+```{=typst}
+#grid(
+  columns: (1fr, 1fr, 1fr),
+  gutter: 12pt,
+  [#block(height: 1.18in, fill: rgb("#F5F1E9"), radius: 10pt, inset: 14pt, stroke: (top: 4pt + rgb("#2B6572")))[
+    #text(font: "Inter", size: 17pt, weight: "semibold", fill: rgb("#033845"))[1 SOURCE]
+    #v(8pt)
+    #text(font: "DM Mono", size: 6.4pt, fill: rgb("#4F747D"))[QUARTO MARKDOWN]
+  ]],
+  [#block(height: 1.18in, fill: rgb("#FBF2EA"), radius: 10pt, inset: 14pt, stroke: (top: 4pt + rgb("#B8663B")))[
+    #text(font: "Inter", size: 17pt, weight: "semibold", fill: rgb("#033845"))[2 OUTPUTS]
+    #v(8pt)
+    #text(font: "DM Mono", size: 6.4pt, fill: rgb("#4F747D"))[HTML + TYPST PDF]
+  ]],
+  [#block(height: 1.18in, fill: rgb("#EFF8F8"), radius: 10pt, inset: 14pt, stroke: (top: 4pt + rgb("#55BAC0")))[
+    #text(font: "Inter", size: 17pt, weight: "semibold", fill: rgb("#033845"))[∞ VERSIONS]
+    #v(8pt)
+    #text(font: "DM Mono", size: 6.4pt, fill: rgb("#4F747D"))[GIT TRACKED]
+  ]],
+)
+#v(10pt)
+```
 
 AI training and deployment occur primarily in data centres, making electricity demand and data-centre infrastructure central to environmental assessment [@iea2025]. Research also shows that inference impacts can vary substantially across model and task choices [@luccioni2024]. A defensible assessment therefore needs to connect **AI activity → compute → energy → location → emissions**, while documenting assumptions and uncertainty.
 
@@ -60,6 +134,8 @@ AI training and deployment occur primarily in data centres, making electricity d
 </div>
 ```
 
+::: {.content-visible when-format="html"}
+
 | Demonstrated capability | Web report | PDF |
 |---|:---:|:---:|
 | SAIG typography and colors | ✓ | ✓ |
@@ -69,9 +145,15 @@ AI training and deployment occur primarily in data centres, making electricity d
 | Equations and cross-references | ✓ | ✓ |
 | One-click PDF access | ✓ | n/a |
 
+:::
+
 ::: {.callout-note title="What is real vs. illustrative?"}
 The sources and general methodological statements are real. All numerical findings in this demo are placeholders created solely to exercise the design system.^[For an actual engagement, these values would be generated from client activity data, model/hardware characterization, data-centre factors, and location-specific electricity data.]
 :::
+
+```{=typst}
+#pagebreak()
+```
 
 # Measurement approach
 
@@ -105,6 +187,10 @@ Table @tbl-boundary shows how a report can make assumptions explicit rather than
 
 : Measurement boundary and evidence hierarchy {#tbl-boundary}
 
+```{=typst}
+#pagebreak()
+```
+
 # Illustrative findings
 
 The figure below is intentionally synthetic, but demonstrates how a result can be presented in a way that works identically in browser and PDF.
@@ -128,6 +214,10 @@ A result like Figure @fig-energy would normally be accompanied by a traceable ev
 
 The point of the table is not the sample values. It is the **reporting pattern**: inputs are visible, results are comparable, and the reader can distinguish model-efficiency effects from electricity-location effects.
 
+```{=typst}
+#pagebreak()
+```
+
 # Recommendations
 
 For a client-facing version, recommendations can be organized by decision horizon rather than by technical subsystem.
@@ -147,6 +237,10 @@ Map material upstream AI-related emissions into the organization's established G
 ::: {.callout-tip title="Why GitHub helps"}
 Every methodological change, source update, chart revision, and client comment can be reviewed as a diff. The published HTML and PDF can then be regenerated automatically from the approved source.
 :::
+
+```{=typst}
+#pagebreak()
+```
 
 # Technical notes
 
@@ -171,4 +265,4 @@ Every methodological change, source update, chart revision, and client comment c
 
 For a real report, numerical outputs should come from a reproducible data pipeline rather than manually entered tables. Quarto can execute Python or R during render, but keeping calculations separate from the layout layer is often useful for review and assurance.
 
-# References {.unnumbered}
+# References {.unnumbered .unlisted}
