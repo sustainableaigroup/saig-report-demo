@@ -22,8 +22,7 @@
     block.className = "saig-resource-nav";
     block.innerHTML = `
       <div class="saig-resource-title">Resources</div>
-      <a class="saig-resource-link saig-resource-primary" href="${currentPdf()}"><span aria-hidden="true">↓</span> Download PDF</a>
-      <a class="saig-resource-link" href="${links.dashboardUrl}"><span aria-hidden="true">↗</span> Dashboard</a>
+      <a class="saig-resource-link saig-resource-primary" href="${currentPdf()}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">↓</span> Download PDF</a>      <a class="saig-resource-link" href="${links.dashboardUrl}"><span aria-hidden="true">↗</span> Dashboard</a>
       <a class="saig-resource-link" href="${links.githubUrl}" target="_blank" rel="noopener"><span aria-hidden="true">↗</span> GitHub</a>
       <a class="saig-resource-link" href="${links.contactUrl}" target="_blank" rel="noopener"><span aria-hidden="true">↗</span> Reach out to SAIG</a>
     `;
