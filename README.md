@@ -1,59 +1,53 @@
-# SAIG Quarto + Typst demo
+# SAIG Quarto + Typst Report Template
 
-This repository demonstrates a single-source technical report that renders to:
+A shared-source reporting system for Sustainable AI Group. Quarto renders the same report to a responsive HTML experience and a publication-quality Typst PDF.
 
-- `docs/index.html` — polished browser report with hoverable citations
-- `docs/index.pdf` — Typst PDF generated from the same Quarto source
+## Included examples
 
-## Local build
+- `index.qmd` — short design-system demonstration.
+- `methodology.qmd` — long-report stress test based on the August 31, 2026 Closed AI Inference Emissions Methodology draft.
 
-1. Install Quarto.
-2. Open Terminal in this repository.
-3. Run:
+After GitHub Pages deploys:
 
-```bash
-quarto check
-quarto render
-```
+- `.../index.html` / `.../index.pdf`
+- `.../methodology.html` / `.../methodology.pdf`
 
-Then open `docs/index.html` in a browser. The **Download PDF** button links to `docs/index.pdf`.
+## Design system
 
-For live HTML editing:
+- **Inter** — headings.
+- **DM Sans** — body text.
+- **Source Serif 4** — editorial ledes, cover subtitles and executive callouts.
+- **DM Mono** — metadata, technical labels, chapter eyebrows and utility navigation.
 
-```bash
-quarto preview index.qmd --to html
-```
+The HTML sidebar includes a minimal **Resources** group: Download PDF, Dashboard, GitHub and Reach out to SAIG. Edit the three link targets at the top of `report-polish.js` when creating a production report.
 
-When you want to refresh only the PDF:
+## Reusable report patterns
 
-```bash
-quarto render index.qmd --to typst
-```
+- Use a callout-important titled `Key finding` for an executive insight block:
 
-Typst is bundled with Quarto; a separate Typst installation is not required.
+  ```markdown
+  ::: {.callout-important title="Key finding" icon=false}
+  Your decision-relevant finding here.
+  :::
+  ```
 
-## Where to edit things
-
-- `index.qmd` — report content
-- `references.bib` — bibliography
-- `_brand.yml` — cross-format colors, fonts and logo
-- `styles.scss` — web-specific visual design
-- `typst/saig-header.typ` — PDF-specific page treatment
-- `assets/` — logo, gradient and figures
-
-## GitHub Pages
-
-The included `.github/workflows/deploy.yml` renders both formats and deploys the `docs/` folder to GitHub Pages on every push to `main`.
-
-After pushing the repository, go to **Settings → Pages → Build and deployment → Source → GitHub Actions**. The first successful workflow run will publish the report.
-
-## Important
-
-All numerical findings in this demo are illustrative placeholders. The cited sources are real and exist only to demonstrate citation handling and report structure.
-
+- Level-1 sections automatically receive a small section eyebrow on web and PDF.
+- HTML figure/table labels are branded automatically.
+- PDF running headers resolve to the current top-level section.
+- Wide tables are horizontally scrollable on small screens.
 
 ## Brand split
 
-- `_brand.yml`: auto-detected no-logo base brand.
-- `brand-html.yml`: HTML brand including logo.
-- `_brand-pdf.yml`: PDF brand with no automatic logo.
+- `_brand.yml` — auto-detected base colors and typography only; intentionally no logo.
+- `brand-html.yml` — HTML brand, including logo.
+- `_brand-pdf.yml` — PDF brand, intentionally no automatic logo.
+- `styles.scss` — web layout and responsive behavior.
+- `typst/saig-header.typ` — PDF running header/footer and long-document typography.
+
+## Render
+
+```bash
+quarto render
+```
+
+The existing GitHub Action renders all `.qmd` files and deploys `docs/` to GitHub Pages.

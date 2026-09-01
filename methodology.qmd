@@ -1,0 +1,1123 @@
+---
+pagetitle: "Closed AI Inference Emissions Methodology"
+---
+
+```{=html}
+<div class="saig-cover">
+  <div>
+    <div class="saig-logo-card"><img src="assets/saig-logo.png" alt="Sustainable AI Group"></div>
+    <div class="saig-kicker" style="margin-top:3.2rem;">Methodology / GHG assurance review</div>
+    <h1>Closed AI Inference<br>Emissions Methodology</h1>
+    <div class="subtitle">Estimating greenhouse gas emissions from enterprise use of third-party AI services</div>
+    <a class="pdf-button" href="methodology.pdf">↓ Download PDF</a>
+  </div>
+  <div class="saig-cover-meta">
+    <span>DOCUMENT: METHODOLOGY</span><span>REVIEW: GHG ASSURANCE</span><span>UPDATED: 31 AUGUST 2026</span>
+  </div>
+</div>
+```
+
+```{=typst}
+#set page(margin: 0pt, header: none, footer: none, numbering: none)
+
+#place(top + left, dx: 0pt, dy: 0pt)[
+  #image("assets/pdf-cover-bg.png", width: 8.5in, height: 11in, fit: "cover")
+]
+
+#place(top + left, dx: 0.52in, dy: 0.66in)[
+  #block(width: 3.48in, fill: white, radius: 11pt, inset: 12pt)[
+    #image("assets/saig-logo.png", width: 2.96in)
+  ]
+]
+
+#place(top + left, dx: 0.58in, dy: 2.20in)[
+  #text(font: "DM Mono", size: 7.5pt, tracking: 0.8pt, fill: white)[METHODOLOGY / GHG ASSURANCE REVIEW]
+]
+
+#place(top + left, dx: 0.58in, dy: 3.00in)[
+  #block(width: 7.0in)[
+    #set par(leading: 0.92em)
+    #text(font: "Inter", size: 33pt, weight: "medium", fill: white)[Closed AI Inference
+Emissions Methodology]
+  ]
+]
+
+#place(top + left, dx: 0.58in, dy: 4.63in)[
+  #block(width: 6.90in)[
+    #set par(leading: 0.72em)
+    #text(font: "Source Serif 4", size: 13.2pt, fill: rgb("#F4F8F8"))[
+      Estimating greenhouse gas emissions from enterprise use of third-party AI services
+    ]
+  ]
+]
+
+#place(top + left, dx: 0.58in, dy: 9.20in)[
+  #block(width: 7.34in, height: 0.98in, fill: white, radius: 11pt, inset: 14pt)[
+    #grid(
+      columns: (1fr, 1fr, 1fr),
+      gutter: 14pt,
+      [#text(font: "DM Mono", size: 6.5pt, fill: rgb("#4F747D"))[DOCUMENT]],
+      [#text(font: "DM Mono", size: 6.5pt, fill: rgb("#4F747D"))[REVIEW]],
+      [#text(font: "DM Mono", size: 6.5pt, fill: rgb("#4F747D"))[UPDATED]],
+    )
+    #v(5pt)
+    #grid(
+      columns: (1fr, 1fr, 1fr),
+      gutter: 14pt,
+      [#text(font: "DM Mono", size: 9.0pt, weight: "medium", fill: rgb("#033845"))[METHODOLOGY]],
+      [#text(font: "DM Mono", size: 9.0pt, weight: "medium", fill: rgb("#033845"))[GHG ASSURANCE]],
+      [#text(font: "DM Mono", size: 9.0pt, weight: "medium", fill: rgb("#033845"))[31 AUGUST 2026]],
+    )
+  ]
+]
+
+#pagebreak()
+#set page(
+  margin: (top: 0.72in, bottom: 0.72in, left: 0.62in, right: 0.62in),
+  header: saig-header,
+  footer: saig-footer,
+  numbering: none,
+)
+
+#show heading.where(level: 1): it => block(above: 12pt, below: 14pt)[
+  #text(font: "DM Mono", size: 6.4pt, tracking: 0.7pt, fill: rgb("#819CA2"))[SECTION]
+  #v(4pt)
+  #text(font: "Inter", size: 25pt, weight: "medium", fill: rgb("#B8663B"))[#it.body]
+]
+#show heading.where(level: 2): it => block(above: 13pt, below: 8pt)[
+  #text(font: "Inter", size: 15pt, weight: "medium", fill: rgb("#2B6572"))[#it.body]
+]
+#show heading.where(level: 3): it => block(above: 10pt, below: 5pt)[
+  #text(font: "Inter", size: 11.5pt, weight: "medium", fill: rgb("#2B6572"))[#it.body]
+]
+
+// A long methodology benefits from a deliberate PDF contents page.
+#text(font: "DM Mono", size: 6.6pt, tracking: 0.7pt, fill: rgb("#819CA2"))[DOCUMENT MAP]
+#v(5pt)
+#text(font: "Inter", size: 25pt, weight: "medium", fill: rgb("#B8663B"))[Contents]
+#v(10pt)
+#outline(title: none, depth: 2, indent: 14pt)
+#pagebreak()
+```
+
+# 0. Reader’s guide
+
+This section exists for readers fluent in GHG accounting and unfamiliar with AI infrastructure. Nothing in it is normative; §1 onward is.
+
+## 0.1 The problem in one paragraph
+
+An organization buys access to a hosted AI model. It cannot see the data center, the hardware, the electricity contract, or the energy drawn by any request. The provider publishes none of it. The organization nonetheless has a Scope 3 reporting obligation. This methodology estimates that figure from what the customer *can* evidence — how much it used the service — multiplied by a chain of documented factors, each traced to a primary source, each with its direction of error stated.
+
+## 0.2 AI terms in GHG accounting language
+
+| AI term | What it is | GHG accounting analogue |
+| :---- | :---- | :---- |
+| Token | The unit a model reads and writes; roughly 4 text characters | Activity data unit |
+| Input (prompt) token | Text sent to the model | Activity data |
+| Output (completion) token | Text the model generates | Activity data; \~3–10× the energy of an input token |
+| Cached input token | Input reused from a prior request; skips part of the computation | Activity data at a discounted intensity (§4.5) |
+| Per-token energy intensity | Wh consumed per token by a named model | Emission factor (pre-conversion) |
+| Inference | Running a trained model to answer a request | The activity being measured |
+| Training | Building the model: the final training run and everything around it | Part of model development; allocated to the service purchased (§11) |
+| Model development | All computing a provider uses to create and improve the models it sells: final training runs, post-training and reinforcement learning, experiments, failed runs, unreleased models and research | Supplier overhead, allocated by the customer’s share of output (§11) |
+| Closed model | Weights not published; nothing about serving is observable | A supplier providing no primary data |
+| Accelerator | The specialized chip doing the computation (GPU, TPU, wafer-scale) | The primary energy-consuming asset |
+| Batch size | How many requests the chip processes simultaneously | Load factor |
+| Serving fleet | The pool of machines a provider keeps available | Determines idle-capacity uplift |
+| Activity bridge | Converting a tool’s telemetry into token counts | Proxy / extrapolation method under Scope 3 guidance |
+| Routing layer | Software dispatching requests across several models | Requires attribution to underlying models, not to the layer |
+
+## 0.3 The calculation in one page
+
+    `tokens used            (customer telemetry, or bridged from it)          §5`  
+  `× energy per token       (CLEER, per named model)                          §6`  
+  `= serving accelerator energy`  
+  `+ serving accelerator energy × d  (model development ratio, per provider)  §11`  
+  `= total accelerator energy`  
+  `× host uplift            (CPU, DRAM, networking, power supply losses)      §7`  
+  `× idle uplift            (serving only; provisioned but not serving)      §7`  
+  `× PUE                    (cooling and power distribution)                  §10.1`  
+  `= facility energy`  
+  `× grid carbon intensity  → operational emissions                           §10.2`  
+  `+ facility energy × construction intensity → building and MEP              §9`  
+  `+ accelerator energy × embodied intensity  → hardware manufacturing        §8`  
+  `= reported emissions                                                       §12`
+
+## 0.4 If you are assuring this
+
+Start at §14, which maps every material number to its source, evidence grade and direction of error, and states what to test. The three weakest inputs are named in §14.3 rather than left to be discovered.
+
+# 1. Purpose and scope
+
+**Who this is for.** *The customer* is an organization consuming generative AI services it does not operate. It buys hosted model access through a vendor application or API. It is not the model developer. It has no operational control over, and no site-level visibility into, the data centers where inference occurs. No rack power density, facility PUE or grid region is available to it for any tool in scope, and none can currently be obtained. That position determines most of the exclusion logic and factor selections that follow.
+
+**In scope.** Third-party hosted AI services accessed through a vendor application or API, including routing layers dispatching across multiple hosted models. The authoritative list per engagement is the tool register (§5.1).
+
+**Out of scope.** Models the customer trains, fine-tunes or self-hosts — these sit inside the customer’s operational control and are addressed by existing cloud and data-center accounting. Provider-side intensity metrics (per-FLOP, per-parameter, including the GSF SCI family and Google’s compute carbon intensity) are omitted as inapplicable, not excluded on materiality: they require FLOP counts no consumer of a closed model can observe.
+
+**Modality.** This version covers text inference on a per-token functional unit. The boundary, uplift chain, embodied stack and energy-to-carbon conversion apply to any modality; only the accelerator intensity term is modality-specific. Video precedent exists; image and audio follow as the corresponding accelerator estimation completes. Non-text modalities are roadmap items, not exclusions requiring justification.
+
+**How it was compiled.** A synthesis of three inputs: a survey of published evidence read against primary sources (Appendix A); new empirical work, being the CLEER benchmarking campaign (§6) and first-party host-power measurement (§7.2); and the accounting frameworks the result must enter (GHG Protocol Corporate Standard and ICT sector guidance, ITU-T L.1801; Appendix B). Three rules govern the combination. Where published evidence converges, the converged value is adopted and the convergence recorded. Where it diverges, the divergence is stated, a value selected with reasoning, and the residual carried into §13. Where no adequate evidence exists, the gap is filled by measurement where feasible and disclosed as a limitation where not.
+
+# 2. Notation and units
+
+Energy in kWh, emissions in kgCO₂e, power in W unless stated.
+
+| Symbol | Quantity | § |
+| :---- | :---- | :---- |
+| m | A model in the served mix | 6 |
+| Tᵢₙ(m), T\_c(m), Tₒᵤₜ(m) | Uncached input, cached input and output token counts | 5 |
+| ēᵢₙ(m), ēₒᵤₜ(m) | Mean CLEER accelerator energy per input / output token, Wh/token | 6 |
+| σᵢₙ(m), σₒᵤₜ(m) | Standard deviation on those means | 6 |
+| r(m) | Cache-read price ratio for model m | 4.5 |
+| E\_acc | Accelerator energy for the period | 6, 11 |
+| h | Host uplift (CPU, DRAM, NICs, storage, fans, PSU losses) | 7 |
+| i | Idle and provisioned-capacity uplift | 7 |
+| p | Power usage effectiveness | 10.1 |
+| E\_fac | Facility energy for the period | 7, 11 |
+| CI | Grid carbon intensity, kgCO₂e/kWh | 10.2 |
+| k\_c | Construction intensity, kgCO₂e per kWh facility electricity | 9 |
+| M | Embodied carbon of a serving machine, kgCO₂e | 8 |
+| L | Hardware service life, years | 8 |
+| P̄\_tray | Average accelerator-tray power over life, as a share of tray TDP | 11 |
+| I\_emb | Embodied intensity, kgCO₂e per kWh accelerator energy | 8, 11 |
+
+**Hardware classes.** Factors differing by serving hardware are stated per class. *TPU-served* denotes Google-served models, for which Google publishes measured production data. *GPU-served* denotes NVIDIA-served models, the default for all other tools. §7.4 governs classes outside both.
+
+# 3. System boundary
+
+## 3.1 Included
+
+| Component | Treatment | § |
+| :---- | :---- | :---- |
+| Operational inference energy — accelerator | CLEER estimate, per token, by model | 6 |
+| Host CPU, DRAM, NICs, storage, fans, PSU losses | × 1.50 GPU-served / × 1.43 TPU-served | 7.3 |
+| Idle / provisioned capacity | × 1.10 | 7.3 |
+| Facility overhead | PUE, 1.45 default | 10.1 |
+| Model development — training, post-training, experiments and research | × d, applied to serving accelerator energy | 11 |
+| Embodied — IT hardware, amortized | NVIDIA PCF \+ host tray \+ distribution | 8 |
+| Embodied — data-center construction | `≈ 7 gCO₂e per kWh facility electricity` | 9 |
+
+## 3.2 Excluded
+
+| Source | Bound vs. inference emissions | Basis | § |
+| :---- | :---- | :---- | :---- |
+| Downstream data storage | \~0.11% at 1-year retention | Nibler & Ropars (CCGrid 2025\) enterprise-drive constant power, against Google’s 0.24 Wh median prompt. Crosses 1% only at \~10-year retention | 4.1 |
+| Network transmission | \~0.43% (2020 intensities); \~0.17% (2025) | Coroamă (2021) WAN/FAN/RAN composite; Google measures data-center networking negligible per text prompt | 4.2 |
+| End-user devices | Not additive | Already inside the customer’s Scope 2 / Scope 3 Cat. 7\. Excluded to prevent double-counting, not on scale | 4.3 |
+| End-of-life / decommissioning | \~0.15% (LB) / \~0.38% (MB) | `Falk et al. (2025) no-credit A100 LCA: disposal ≈1.5% of cradle-to-grave. Google TPU LCA declines a potential 4% credit` | 4.4 |
+| Cached input tokens | Conditional | Excluded only below a documented 10% cacheable-prefix share; counted above it | 4.5 |
+
+Rationale detail for the first four is held in §4; each clears the 1% per-source threshold and the aggregate check in §4.6.
+
+# 4. Exclusion justifications
+
+ITU-T L.1801 §8.1.2.4 adopts ITU-T L.1410’s cut-off rules: a cut-off requires clearing tests on mass, energy, environmental significance and cumulative effect, and the accumulated effect of individually insignificant processes must be checked. Each exclusion clears two tests: individually below threshold, and collectively within an aggregate cap (§4.6).
+
+**Materiality threshold: 1%** of operational inference emissions per source. Corporate Scope 3 inventories commonly apply 5%; 1% matches the threshold in the Carbon Trust assessment relied on as precedent, and applying the same test as the published source is a stronger position than selecting a looser one.
+
+## 4.1 Downstream data storage
+
+Excluded: provider-side storage of data supplied to or produced by the service. Storage under the customer’s control is already in its cloud inventory.
+
+Carbon Trust excludes downstream storage from its AI-system boundary: in content delivery, one asset is produced once and delivered many times, so storage is significant per piece of content; in generative AI each prompt, which is personalized, drives substantial generation energy, making storage far less material per prompt. Text payloads are smaller than video, so the argument holds a fortiori.
+
+`Bound: a 2,000-token exchange is ~10 kB. At Nibler & Ropars’ measured 3.01 W/TB for a 2.0 TB SAS HDD → 26.4 kWh/TB-year → 2.6 × 10⁻⁴ Wh per exchange retained one year, or ~0.11% of Google’s 0.24 Wh median text prompt. Conservative twice over: dedicated enterprise drives rather than dense archival tiers, and the smallest credible per-prompt denominator in the literature.`
+
+Retention triggers a review if any in-scope tool’s administrator-configured retention runs multi-year with no deletion policy. Published defaults range from \~30 days at API level to Gemini’s 18-month Workspace default.
+
+Not relied upon: the IEA figure of \~5% of data-center electricity attributable to storage, which is a share across all workloads including non-AI cloud services.
+
+## 4.2 Network transmission
+
+Excluded: telecommunications infrastructure between customer and provider data center, including customer-premises equipment. Networking *within* the serving data center is treated in §7.
+
+Google excludes external networking for lack of operational control and measures data-center networking negligible for a text prompt — first-party measurement on the exact workload.
+
+Bound: 10 kB × Coroamă’s composite 0.103 kWh/GB (90% fixed / 10% mobile access) \= 1.0 × 10⁻³ Wh, or \~0.43% of a 0.24 Wh prompt. At 2025 intensities (0.0411 kWh/GB) it is 0.17%. Enterprise AI runs predominantly over wired and Wi-Fi, both inside the lower-intensity fixed-access segment.
+
+*Note on the model.* kWh/GB is an allocation heuristic, not a measurement — network energy is largely load-independent, so the marginal energy of one additional exchange is closer to zero than the model implies (Mytton, Lundén & Malmodin, 2024). Used only to establish an upper bound supporting an exclusion, and relied on nowhere in the calculation chain.
+
+Not relied upon: Carbon Trust’s streaming transmission figures. The denominator there is a video session with a large payload moving to the user; no defensible conversion exists to a token-bounded text exchange.
+
+## 4.3 End-user devices
+
+Excluded: customer employee laptops, displays and peripherals.
+
+**Double-counting is the decisive argument**, not materiality. Employee device electricity is already captured in the customer’s inventory — Scope 2 on-site, Scope 3 Category 7 remote. Adding a share here would double-count emissions the customer already reports. The relevant question is whether AI use causes *incremental* device energy beyond an employee already at a computer, which for text interaction is small and not separately identifiable.
+
+Google’s parallel exclusion is noted but not invoked as support: Google excludes consumer devices because it can neither observe nor control them, whereas the customer owns the devices and is itself the end user.
+
+On-device inference is assumed not live. Recorded as a future trigger, not a present limitation.
+
+## 4.4 End-of-life
+
+Excluded: retirement of provider-owned accelerators. Manufacturing and distribution of the same hardware is included (§8).
+
+| Source | Allocation | Finding |
+| :---- | :---- | :---- |
+| Falk et al. (2025), independent cradle-to-grave A100 LCA from teardown and elemental analysis | Cut-off at no-benefit substitution; no recycling credit | `Disposal ≈ 1.5% of cradle-to-grave (≈ 2.1 kgCO₂e on 141 kgCO₂e)` |
+| Schneider et al. (2025), Google TPU LCA | Avoided burden considered, conservatively not applied | Cascaded use assessed at up to 4% offset; the credit is declined |
+
+End-of-life is 1.5% of embodied carbon, embodied carbon is at \~8-10% of lifecycle emissions (location-based), so end-of-life is \~0.12-0.15% of lifecycle emissions. In a market-based scenario, end-of-life is \~0.38% of total, where the embodied share reaches \~25%. Jouppi et al. (2026) confirm both shares across TPU v4, v5p and Ironwood. Both bracketing studies use conservative no-credit allocation, so excluding the stage means declining a credit rather than omitting a burden.
+
+Two limitations disclosed. Falk et al. note end-of-life is likely underestimated across the literature because LCA databases do not model informal e-waste flows — a several-fold increase still leaves the source below threshold on carbon. And the exclusion is defensible **for carbon only**`: in the same study end-of-life contributes ≥ 35% of freshwater ecotoxicity and ≥ 18% of land use. This supports a GHG inventory; the boundary is not a general environmental claim.`
+
+## 4.5 Cached input tokens
+
+Excluded conditionally: accelerator energy attributable to cached input, where a tool’s documented cacheable-prefix share of input is below 10%. At or above that, cached input is counted.
+
+**Why not zero.** A cache hit reuses key-value states from a prior request, skipping prefill for those tokens. It does not skip everything: the cached block is still read from accelerator memory, and decode-time attention runs over that context on every generated token. Cached input carries a real but reduced intensity.
+
+**The proxy, and its basis.** The marginal energy of a cache hit cannot be measured — it depends on serving-stack implementation neither observable for a closed model nor reproducible on the benchmark rig. Providers discount cache reads against uncached input to reflect compute no longer performed, and that published ratio is used as the proxy:
+
+**ēᵢₙ(cached, m) \= r(m) × ēᵢₙ(m)**, where **r(m) is the provider’s published cache-read price ratio for that specific model**
+
+**This is a per-model quantity, not a global constant.** Observed values span 0.10 to 0.50 across current providers and generations. It is carried in the CLEER factor table alongside the intensities, versioned with them, and recorded per model in the factor register. Earlier versions of this methodology adopted a single central value with a sensitivity case; that treatment is superseded — where the provider publishes a per-model ratio, the per-model ratio is used.
+
+**Uncertainty propagation.** Cached intensity is a deterministic multiple of input intensity, so its uncertainty scales by the same multiple:
+
+**σ\_cached(m) \= r(m) × σᵢₙ(m)**
+
+It is *not* r(m) × ē\_cached(m), which would apply the ratio twice and understate the term by ē\_in/σ\_in ÷ r. Since r is a published price, not an estimated quantity, it contributes no uncertainty of its own. This matters wherever cached tokens carry a large share of energy: at r \= 0.10 and a 50% relative input SD, mis-propagating suppresses the cached term’s contribution to the band fivefold.
+
+**Threshold derivation.** With k the input:output ratio, c the cached share of input, and ρ the ratio of output to input intensity:
+
+`share of request energy = k·c·r ÷ [ k·((1 − c) + c·r) + ρ ]`
+
+| Request shape | Input | Output | Cached share | Share of request energy (ρ \= 3, r \= 0.10) |
+| :---- | :---- | :---- | :---- | :---- |
+| Short chat, no repeated prefix | 500 | 300 | 0% | 0% |
+| Assistant turn, light caching | 2,000 | 500 | 30% | 2.0% |
+| Grounded enterprise assistant, fresh retrieval | 7,600 | 500 | 0% | 0% |
+| Long repeated-context session | 20,000 | 800 | 80% | 20.0% |
+| Agentic coding assistant | 60,000 | 1,500 | 90% | 34.0% |
+
+Cached input is immaterial where little caching occurs and first-order where a great deal does; it cannot be excluded across the board. Setting the expression to 1% and solving for c returns 25% at short context, 16% at k \= 4, converging to \~10% as input length grows, and \~4% at r \= 0.25. **10% is adopted.**
+
+**Adopted rule.** Excluded only where the documented cacheable-prefix share is below 10%. At or above, or where unknown for a tool whose usage pattern implies long repeated prefixes, cached input is counted at r(m) × ēᵢₙ(m). The tool register records which branch applies and the evidence.
+
+In practice this sorts tools into two groups. Tools regenerating context every request — enterprise assistants performing fresh retrieval — sit near zero cacheable share, and 100%-uncached treatment is exact rather than merely conservative. Tools with long repeated prefixes — agentic coding assistants, long-running sessions — sit well above threshold and their cached input is counted.
+
+**Cache-write tokens.** Some providers distinguish a cache *write* — the first occurrence of a prefix, stored for future reuse — from a cache *read*, which retrieves it. A write is not a discount case: the full prefill computation still occurs, since the content has not been seen before, and providers price cache writes at or above the base input rate, confirming no compute is avoided. Cache-write tokens are therefore counted as ordinary uncached input, at ēᵢₙ(m), not at r × ēᵢₙ(m). Where a provider's telemetry does not distinguish writes from ordinary uncached input, no adjustment is needed — the two already carry the same intensity.
+
+**Residual limitation.** This is the only place in the methodology where a price stands in for a physical quantity. Provider pricing embeds margin and competitive positioning as well as marginal cost. It is evidence of the *order* of the saving, not a measurement. The direction of error is not established. Revisited when cache-hit energy becomes directly measurable or a provider publishes it.
+
+## 4.6 Aggregate cut-off check
+
+| Source | Scale | Basis |
+| :---- | :---- | :---- |
+| Downstream data storage | \~0.11% | §4.1 |
+| Network transmission | \~0.43% (2020) / \~0.17% (2025) | §4.2 |
+| End-of-life | \~0.15% LB / \~0.38% MB | §4.4 |
+| End-user devices | Not additive | Already in the customer’s inventory |
+| Cached input | 0% where excluded; counted above threshold | §4.5 |
+| **Total quantified** | **\~0.69% LB / \~0.92% MB** | Each at its conservative bound |
+
+Each clears the 1% per-source threshold; the aggregate clears it too, and sits well inside the 5% line-item threshold common in corporate Scope 3 practice. Every component is stated at the pessimistic end of its range.
+
+Two sources fail the per-source test and are therefore **included**: data-center construction (§9) and hardware distribution (§8.2).
+
+# 5. Registers, activity data and model coverage
+
+Three registers govern the inputs each period. All are versioned; a change to any triggers a new methodology version, not a period adjustment.
+
+## 5.1 The tool register
+
+The authoritative list of AI services in scope. Per tool it records: vendor and access channel; model or model family served; serving hardware class (which selects the §7.3 and §8.3 factors); the §10.2 grid-intensity rung with its supporting evidence; whether the behind-the-meter override applies; the cached-input branch under §4.5; and a pointer to the tool’s activity-bridge document where its telemetry does not expose tokens.
+
+Where a tool routes across multiple models, the register records the routing basis, and volumes are attributed to the underlying models rather than the routing layer.
+
+## 5.2 The activity bridge
+
+Token counts are the activity data this methodology requires:
+
+Tᵢₙ(m), T\_c(m), Tₒᵤₜ(m) \= Σ over tools mapped to m of bridge(tool telemetry)
+
+Where a tool reports tokens directly, no bridge is required. Where it reports events, messages, sessions, credits or seats, a bridge is built and its conversion basis recorded. Because every in-scope channel resolves to a token count, no channel falls back to a spend-based estimate. Applications instrumented with the OpenTelemetry generative-AI semantic conventions emit tokens in a documented form and are consumed directly.
+
+**A token is not a universal unit.** Providers use different tokenizers, so the same text resolves to different counts across models. This does not affect the calculation, which applies a model-specific intensity to that model’s own counts and sums. The limitation to record is narrower: a per-million-token intensity produced under this methodology is a property of one model and is not a cross-provider efficiency ranking.
+
+### Three design principles
+
+**Do not invent what the provider declines to publish.** Where a mapping is undisclosed — which model serves which feature, how many model calls one user-visible action triggers — use a single documented, defensible value and disclose it as a fallback, rather than manufacturing a per-feature table that would not survive a source check.
+
+**Use the correct estimator.** A period total requires the arithmetic *mean* of tokens per unit of activity. Substituting a high percentile is an error, not a conservatism: on the right-skewed distributions typical of LLM serving, a p90 or p99 in place of the mean overstates by a factor of two to six.
+
+**Do not compound conservative picks.** Stacking cautious parameters multiplies them. Where a measured aggregate exists, anchor on it once rather than rebuilding the same quantity from several cautious sub-parameters layered on each other.
+
+### Five elements of any bridge
+
+1. **The atomic unit.** What one unit of the provider’s telemetry corresponds to in model terms, and how many actual model calls it triggers. Where the published architecture implies more calls than the telemetry unit suggests (retrieval, orchestration, post-processing), disclose as an understatement rather than invent a multiplier. Verify that the provider’s counter measures user-initiated turns and not internal steps, or a call multiplier will double-count.
+
+2. **Model assignment.** A documented rule anchored to the provider’s published rollout or default-change dates, not to announcements of opt-in features. Surface-specific overrides only where the provider has published a surface-specific model.
+
+3. **Tokens per unit.** Where first-party production traces exist, they establish *distribution shape* and a measured floor; where a contemporary market-wide study exists, it sets the *level*. Shape and level are distinct roles and are kept distinct. Vendor traces are frequently dated relative to the reporting period and cannot be extrapolated across a structural break without corroboration.
+
+4. **Volume back-fill, where the period is incomplete.** Scale a documented secondary driver available for the full period by the ratio measured over the overlap window. Report ratio-of-means as headline, with the spread against mean-of-ratios disclosed. **Test the ratio for a time trend before freezing**: a flat back-cast understates if the ratio is declining and overstates if rising, and the direction determines whether a correction is needed. Where the period contains a documented deployment event, retain its actual volume but exclude it from the calibration. Cross-check against a second independent driver where one exists.
+
+5. **Caching.** Where the provider exposes cache-hit counts, split input and carry the cached portion at r(m) × ēᵢₙ(m). Where not, assume 100% uncached and record whether that is exact or merely conservative for the tool’s usage pattern.
+
+### The generic / tenant-specific split
+
+Every bridge document states which inputs are reusable across engagements and which must be re-established per tenant.
+
+| Category | Contents | Travels with |
+| :---- | :---- | :---- |
+| Generic | Estimation method, atomic-unit definition, model-assignment rule and ladder, token build-up method, caching treatment | The tool |
+| Tenant-specific | Activity mix by feature or surface, back-fill driver and ratio, model and data-residency configuration, license tier | The tenant |
+| Provider-level | PUE and grid rung (§10), hardware-class embodied factors (§8) | The provider |
+
+A bridge document not separating the first two cannot be reused without full re-derivation, defeating the purpose of maintaining it. Provider-level factors are re-opened only when the provider changes — a new disclosure, a newly documented behind-the-meter site, a hardware-generation shift — not when the tenant does.
+
+Bridge documents are versioned annexes named “\[Tool\] Activity Bridge Methodology,” registered against the tool-register entry they support.
+
+## 5.3 The factor register
+
+Holds every quantity fixed at methodology level: the host, idle and PUE uplifts; the embodied stack and lifespan; the construction intensity; the grid rung and factor version per provider; the CLEER intensity table version; and the per-model cache-read ratio r(m). Each entry records source, vintage, **evidence grade** (§14.1) and the trigger that would reopen it.
+
+## 5.4 Model coverage and the long-tail fallback
+
+**Commitment.** For each reporting period, CLEER factors are provided for named models accounting for **at least 99.9% of the period’s token volume**.
+
+**The residual.** Enterprise tool registers routinely contain a long tail carrying negligible volume: legacy versions retained for a handful of workflows, models reachable through a routing layer but rarely selected, evaluation traffic, and tokens carrying no model attribution at all. Building a factor for each would not change the answer.
+
+**Fallback rule.** Two branches, both taking the maximum rather than the mean, per the conservatism principle:
+
+1. **Provider and tier identifiable**: Assign the highest-intensity CLEER-covered model from the same provider and tier. For example, if Claude Opus 6 is not covered by CLEER, use the highest-intensity Claude Opus factor that exists.
+
+2. **Not identifiable:** Assign the highest-intensity model in the current CLEER table.
+
+**Why a crude rule is acceptable.** The residual requires bounding, not precision. At 0.1% of token volume, a fallback overstating true intensity tenfold contributes under 1% of the reported figure. The coverage threshold is what licenses the crudeness of the rule — and makes it self-policing.
+
+**Coverage statement, per period.** Recorded and reported: token volume covered by named factors, as a percentage; the models falling to the fallback and their volumes; which branch applied to each; and the fallback’s contribution as a percentage of reported emissions. **If that contribution exceeds 1%, coverage is insufficient**: factors are built for the largest unmatched models until it falls below.
+
+# 6. CLEER: estimating accelerator energy
+
+## 6.1 What CLEER estimates
+
+CLEER — Closed-model Latent Energy Estimation Range — estimates per-token accelerator energy for a named model as a mean and standard deviation, separately for input and output tokens.
+
+The boundary is narrow, stated so no term is counted twice downstream. **CLEER estimates accelerator energy only.** It does not estimate host CPU, DRAM or other server draw; idle or provisioned capacity; facility overhead; or carbon in any form. Each is supplied by a separate documented factor in §7 and §10, with non-overlap conditions in §12.
+
+E\_acc(m) \= Tᵢₙ(m)·ēᵢₙ(m) \+ T\_c(m)·r(m)·ēᵢₙ(m) \+ Tₒᵤₜ(m)·ēₒᵤₜ(m)
+
+Input and output are carried separately because they are not energetically equivalent: input is consumed in a parallelized prefill pass, output generated sequentially in a more energy-intensive decode pass.
+
+## 6.2 Why a modeled estimate is required
+
+For an open model benchmarked locally, accelerator count, parallelism strategy and batch size are known. For a closed model none is observable.
+
+**Power draw is not a fixed property of a model.** It depends on how many accelerators are involved and how full the batch is. The same model at batch 32 draws materially different power than at batch 512, and a smaller model at high batch size can draw approximately the same power as a larger model at a low one. Model size alone cannot produce a defensible figure.
+
+**Why scaling up a small deployment fails.** Deploying an open model on 1–8 accelerators to estimate a closed model’s energy fails in two directions simultaneously. Closed models are served across hundreds of accelerators, so a small deployment *understates* total machine power. And a small deployment cannot reach hyperscaler throughput and batch size, so per-request power is *overstated* — matching hyperscaler tokens-per-second on 8 accelerators requires an order-of-magnitude lower batch size and therefore an order-of-magnitude higher power per request. These do not cancel: autoregressive decode does not scale linearly, so the residual is neither theoretically nor empirically bounded.
+
+**Active parameters, not total.** Across \~43 open models, total parameter counts span 20 billion to 2.8 trillion while active counts stay within roughly 3 to 100 billion. In a mixture-of-experts architecture each token activates only a subset, so a 2.8-trillion-parameter model with 100 billion active performs the work of a 100-billion-parameter dense model per token. Active count drives compute and power, and the framework is anchored on it. This is what makes estimation tractable despite provider opacity about total size.
+
+CLEER extends Jegham et al. (2025), peer-reviewed and accepted in *Communications of the ACM*, which estimated latency from published throughput and time-to-first-token quantiles and combined it with a power term. The structure is retained; the limitation was empirical, not structural — available compute did not permit benchmarking under production-representative serving conditions, so the power term could not be conditioned on deployment configuration. CLEER replaces that term with direct benchmarking across expert parallelism, batch size and query length.
+
+## 6.3 Stage 1 — empirical benchmarking
+
+Open mixture-of-experts checkpoints are reduced to an *active slice* preserving native expert activation width: if the router activates k experts per token, the pruned checkpoint retains k routed experts per layer. Dense layers, attention blocks, normalization, tokenizers, shared experts, quantization scale tensors and auxiliary blocks are preserved unchanged; router gate weights are sliced to the retained set.
+
+Pruning is a **systems proxy, not a compression method**, and is not intended to preserve accuracy. It retains layer structure, attention blocks, quantization format, router fanout, shared experts and active expert count per token while reducing inactive routed experts held in memory. This permits measurement under deployment conditions not otherwise reproducible on available hardware.
+
+**Benchmark grid.**
+
+| Dimension | Range |
+| :---- | :---- |
+| Expert parallelism | EP1, EP2, EP4 measured; EP8 extrapolated, validated on a subset |
+| Batch size | 32, 64, 128, 256, 384, 512 |
+| Query length | \~100 to \~1,000 input tokens |
+
+Prompt set derived from MMLU: 512 distinct prompts, each configuration run three times with dataset randomization to control for warm-up, spikes and ordering effects. Per-test outputs: aggregate throughput, per-request latency, per-request throughput and time to first token, average and maximum per-accelerator power, and CPU/RAM power where available.
+
+For each model and parallelism level, two monotonic curves are fitted across measured batch sizes — per-request throughput and total system power. Per-request throughput is aggregate decode throughput divided by batch size, since that is what a single user experiences:
+
+TPS\_req(b) \= TPS\_agg(b) ÷ b
+
+Curves are valid only within the measured batch range. Real deployments run at higher parallelism than the sweep reaches, so EP8 is extrapolated by log-log regression of throughput and power on log batch size, log parallelism and their interaction, and measured directly on a subset to validate.
+
+The current donor pool comprises benchmarked configurations across DeepSeek, Qwen, GLM, Kimi, MiniMax, MiMo, Gemma and GPT-OSS families, in FP8, INT4, NV4, FP4 and MXNV4 numerical formats. The pool version is recorded in the factor register.
+
+## 6.4 Stage 2 — architectural clustering
+
+Identifies which open models a closed model most resembles, so a benchmarked proxy can stand in for it.
+
+**Step 1, size estimation.** Active and total parameter counts are estimated by nearest-neighbor regression over the three nearest donors, weighted by distance, using features observable for closed models: the AA-Omniscience accuracy benchmark, the SciCode coding benchmark, price per token, the AA-Omniscience non-hallucination score and its square. AA-Omniscience isolates knowledge retention from reasoning and correlates strongly with parameter count, which is what makes it usable as a size proxy.
+
+**Step 2, proxy matching.** The estimated size locates the five nearest open donors in a combined feature space of log active parameters, log total parameters, log context window and release year, each weighted before distance is computed. Weights are derived by grid search under leave-one-out cross-validation, not selected by hand: the search identifies the best achievable coverage, then selects the weight combination within one donor of that ceiling with the lowest median point error.
+
+**Output per closed model:** a size range, the donors and their individual weights, and a **standardized distance score** expressing how far the model sits from its neighbors *relative to how far a typical donor sits from its own peers*. Normalization is what makes the score interpretable — an absolute distance means nothing without knowing what a normal distance looks like in that neighborhood.
+
+**Donor availability.** Five is standard. Older closed models draw on a thinner contemporaneous pool and may match on as few as three. A reduced count widens the size range, is reflected in the confidence score, and is not absorbed silently.
+
+## 6.5 Stage 3 — projection and energy derivation
+
+Artificial Analysis publishes five percentile points (5th to 95th) for a closed model’s observed throughput and time to first token, across three query shapes, averaged across days.
+
+For each percentile, every proxy configuration is tested for whether it can produce that speed. Where the target falls within a configuration’s fitted range, the curve is inverted for the batch size that would have produced it, and power is read from that configuration’s power curve at the same batch size:
+
+b\* such that TPS\_req(b*) \= TPS\_target, then P\_req \= P\_total(b*) ÷ b\*
+
+Where more than one configuration matches, per-request power estimates are combined using the clustering donor weights.
+
+**Deployment floor.** Configurations below 4 accelerators are discarded for models of DeepSeek V3 scale, since DeepSeek’s throughput was low relative to peers. A model at half that scale floors at 2\. Blackwell-hosted models using mxfp4/nvfp4 need \~50% of the VRAM, so a DeepSeek-scale model at mx4 floors at 2\.
+
+**Energy derivation.** Speed and TTFT pairs are sampled from the two percentile distributions using a Gaussian copula with negative correlation, since a request generating quickly also tends to queue less. For each pair, the interpolated power mean and standard deviation at that speed are used to draw an actual power value rather than always the mean, propagating uncertainty from both throughput and power stages:
+
+t\_total \= TTFT \+ Lₒᵤₜ ÷ TPS eᵢₙ \= (P\_req × TTFT) ÷ Tᵢₙ and eₒᵤₜ \= (P\_req × t\_completion) ÷ Tₒᵤₜ
+
+TTFT is treated as prefill time and remaining completion time as decode. Sampled pairs falling outside the 5th–95th percentile range are **discarded, not clamped or extrapolated**, keeping results inside the range Artificial Analysis measured.
+
+**Reasoning contamination.** Where a model’s TTFT does not separate reasoning from prefill, input intensity falls back to the nearest uncontaminated model in the same family. Input energy is roughly an order of magnitude below output, so the fallback does not materially move results.
+
+**Cached tokens.** Derived from the provider’s published cache-read price ratio per §4.5.
+
+## 6.6 Worked example
+
+Illustrating the chain end to end for one model (Claude Opus 4):
+
+At the median percentile, Opus 4's measured throughput is **39.4 tokens/second**.
+
+* **DeepSeek V3.2**: no match. Its benchmark rows do not match the measured throughput of Opus 4\.  
+* **GLM-4.7**: The batch size reproducing 39.4 TPS is **\~224** (EP4, H200). At that batch, GLM-4.7 gives **2.19 W low / 3.99 W average / 10.31 W high** per request. Since GLM-4.7 on B200 hardware does not match the TPS of Opus 4, it falls back to the GLM-4.7 deployed on H200.   
+* **Qwen3.5 397B**: The batch size **\~264** (EP2, B200). Gives **1.80 W low / 3.63 W average / 5.93 W high**.  
+* **Kimi K2.6**: The batch size is **\~304** (averaged across 3 valid configs: EP2/B200, EP4/B300, EP8/B300). Gives **4.53 W low / 8.50 W average / 11.75 W high**.  
+* **Gpt-oss-120b**: no match. At EP1, its throughput band overlaps Opus 4's target, but EP1 fails to meet the required EP floor for this model/hardware. At EP2 and EP4, it clears the EP floor; however, its per-request throughput at those configurations is far outside Opus 4's 39.4 TPS band. No config satisfies both conditions at once.
+
+With DeepSeek V3.2 and gpt-oss-120b out, the remaining three weights (0.272 / 0.127 / 0.098, summing to 0.497) get renormalized to **GLM-4.7: 0.547, Qwen3.5 397B A17B: 0.256, Kimi K2.6: 0.197**.
+
+Weighted across the three matched donors: **\~4.79 W average at the median, range \~2.56–9.47 W**, implied batch size **\~250**.
+
+* **Output:** `4.79 W ÷ (39.4 tokens/s × 3600) ≈ 3.4 × 10⁻⁵ Wh/token`  
+* **Input:** TTFT slope of **0.006076 s per input token** `→ 4.79 W × 0.006076 s ÷ 3600 ≈ 8.1 × 10⁻⁶ Wh/token`
+
+Repeated across all percentiles and aggregated, the published factors for Claude Opus 4 are:
+
+|  | Mean (Wh/token) | SD (Wh/token) | Relative SD (SD/Mean ×100) |
+| :---- | :---- | :---- | :---- |
+| Output | 3.81 × 10⁻⁵ | 1.17 × 10⁻⁵ | 30.7% |
+| Input (uncached) | 9.66 × 10⁻⁶ | 5.21 × 10⁻⁶ | 53.9% |
+
+Output-side uncertainty propagates from the low/high power range; input-side additionally carries the TTFT regression fit error.
+
+## 6.7 Deployment assumptions
+
+| Assumption | Basis | Residual risk |
+| :---- | :---- | :---- |
+| A proxy configuration reaching a given throughput implies a batch size and per-request power representative of the closed model at that speed | The proxy is an architecturally comparable stand-in, not a claim about the actual configuration; clustering is what makes substitution defensible | Two-sided; magnitude governed by the distance score |
+| US providers in 2025–2026 run increasingly on Blackwell-generation hardware | Microsoft began receiving B200 systems December 2025; comparable hyperscaler timelines | Understates if older hardware remains in the mix |
+| Google serves Gemini on its own TPU hardware | Sustained preference for in-house accelerators | Separate TPU treatment (§6.9) |
+| Chinese providers deploy primarily on Hopper-class hardware | Blackwell under standing presumption of export denial | Not material to typical tool lists |
+| Closed providers run at high, sustained batch size | Traffic volumes make low-batch operation implausible outside a lightly loaded deployment | Overstates per-token energy if true batch sizes are lower |
+| The prefill/decode power relationship measured on proxies carries to the closed model | Both phases measured directly on benchmarked checkpoints; what is assumed is transfer across the proxy match | Bounded by proxy-match quality; flagged per model |
+
+## 6.8 Validation
+
+**Deployment reconstruction.** The principal difficulty is not the gap between open and proprietary architectures but the gap in *deployment conditions*. Any benchmark that cannot reproduce serving across hundreds of accelerators will overstate closed-model energy.
+
+DeepSeek’s published deployment report provides the test case. DeepSeek V3 has 671B parameters with 37B active, deployed at expert parallelism 32 for prefill and 144 for decode, distributing 256 routed experts across 144 accelerators at roughly 2 each. Since 8 routed plus 1 shared expert activate per token, each token draws on the compute equivalent of \~4 accelerators, not 144 — per token, not per request, since routing is recomputed each decoding step.
+
+Reported figures give 1,850 tokens/second per accelerator against \~20 tokens/second per user:
+
+Implied batch size \= (1,850 × 4\) ÷ 20 \= 370
+
+That batch size cannot be reached by deploying the full model on one node; memory required exceeds what is available. Pruned to 8 experts across 4 accelerators, reproducing the per-token compute footprint, **the pruned deployment reaches 20 tokens/second at batch 367 against the 370 implied by production figures — a difference under 1%.**
+
+This is the validation for the approach as a whole: pruning and reproducing deployment conditions, rather than running the full model, reproduces throughput and latency behavior closely enough for the configuration to stand in through the remainder of the pipeline.
+
+**Clustering validation.** Every choice — neighbor count, feature set, exclusions, weights — is validated by nested leave-one-out cross-validation, each donor held out entirely, given a noisy size estimate from the remainder, and matched using that noisy estimate exactly as a closed model would be. Coverage stands at approximately 80%: for \~80% of donors the true size falls within the range predicted by their five nearest proxies.
+
+## 6.9 Uncertainty, confidence and hardware coverage
+
+CLEER reports a mean and standard deviation, not a point estimate. The standard deviation carries the clustering proxy match, the EP8 extrapolation error, and real-world variability across the five percentiles under continuous batching. Each result is accompanied by the matched proxy count, the clustering distance, and the EP8 backtest accuracy for that model, so the estimate can be assessed rather than accepted. Propagation into the inventory is §13.1.
+
+**Data quality categorization.** Every quantity is categorized as *measured* (directly observed), *estimated* (derived from a fitted relationship) or *inferred* (obtained by inversion or substitution). Benchmarking throughput, batch size and power are measured; clustering outputs and per-donor weights are estimated; implied batch size, per-request power and the distance score are inferred; final per-token energies are estimated.
+
+**TPU-served models.** The benchmarking framework is GPU-centric and TPU power and throughput characteristics do not map onto it. Until the TPU-specific derivation completes, Gemini per-token accelerator energy is taken from Google’s published production disclosure, and the TPU-class factors in §7.3 and §8.3 apply.
+
+## 6.10 Reasoning modes
+
+Reasoning levels of the same model are **not** separate models. Different levels carry identical input and output token pricing, indicating a reasoning level is a control on how long the model may generate before answering, not a distinct model. A reasoning mode consumes the same tokens; it is permitted to generate more of them.
+
+Because CLEER is denominated per token, no separate intensity is required. Higher reasoning effort raises reported energy through Tₒᵤₜ in §12, not through ēₒᵤₜ. This matters for bridge construction: reasoning tokens are counted within completion tokens by every provider, so an activity bridge that applies a reasoning multiplier on top of a measured completion figure double-counts.
+
+## 6.11 Calibration relative to published production data
+
+CLEER supplies accelerator energy only, so the correct comparator in Google’s published decomposition is the **fleet-average accelerator figure (0.14 Wh per median text prompt)**, not the narrow-boundary 0.10 Wh, which reflects prompts served in Google’s most efficient data centers rather than a narrower boundary. This methodology assumes CLEER intensities are representative of fleet-wide production serving, not of a provider’s most efficient deployments. The assumption is stated because its residual risk is one-sided: if CLEER were calibrated on efficient deployments, the reported figure would understate by up to the same factor of 1.40 separating Google’s two figures.
+
+# 7. Accelerator energy to facility energy
+
+E\_fac \= E\_acc × h × i × p
+
+The boundary — accelerator plus host CPU and DRAM, scaled by facility overhead — follows the measurement convention established since Strubell et al. (2019) and carried into inference by Luccioni, Jernite & Strubell (2024). That study is cited as boundary precedent only: its single-active-GPU unbatched configuration reflects idle draw from seven unused accelerators and would overstate the non-accelerator share relative to production serving, so no multiplier is derived from it.
+
+## 7.1 Evidence base
+
+| Source | Basis | Implied non-accelerator multiplier |
+| :---- | :---- | :---- |
+| Google — Gemini production fleet (2025) | Per-prompt median text prompt: 0.14 Wh active accelerators, 0.06 Wh host CPU and DRAM | × 1.43 |
+| Latif et al. (2025), IEEE Access — metered 8-GPU H100 HGX node | Metered node power under active load: 7.9–8.4 kW against 5,600 W tray TDP | × 1.41 – 1.50 |
+| Epoch AI (2025) — GB200 reference architecture | Total server vs. accelerator power at peak, from published specifications | × 1.53 |
+| NVIDIA DGX H100 — system specification | Rated ceiling 10.2 kW against the same 5,600 W tray | × 1.82 (nameplate) |
+| Google — TPU fleet (2025), five generations | Mean measured machine power ÷ mean accelerator-only power | × 1.64 – 2.22 (mean 1.88) |
+
+A production inference fleet, an independently metered training node and a next-generation reference architecture — different vendors, workloads and measurement methods — land within 0.10 of one another at 1.43, 1.41–1.50 and 1.53. The nameplate ceiling of 1.82 sits above them, as a maximum-configuration rating should. Microsoft’s published GB200 breakdown, in which accelerators contribute more than 50% of provisioned server power, independently confirms the nameplate ratio stays below 2.0 on current hardware.
+
+**Caveat on the metered range.** The 1.41–1.50 range assumes accelerators drew at or near 700 W TDP throughout. If actual draw was below TDP — which the ML.ENERGY Benchmark suggests is common, finding utilization differences alone drive 3–5× energy variation across 1,858 serving configurations — the true multiplier would be *higher*, not lower. The adopted value therefore carries a residual risk of understatement.
+
+**Data-center networking.** Google’s serving boundary excludes inter-server switches and dispatch infrastructure, assessed as negligible per text prompt. Epoch AI estimates this layer at × 1.14 above server power for a rack-scale GB200 training architecture at peak; Oviedo et al. (2026) independently apply × 1.10 for production H100 serving at Microsoft, from NVIDIA’s SuperPOD breakdown in which switching is \~8.15% of peak IT power. This methodology follows Google’s measured treatment for text inference — **no central factor** — and carries × 1.14 at the top of the sensitivity band, since the negligibility finding is Google-specific and workload-dependent.
+
+**Reading the × 2.4 figure.** This ratio is the one most often quoted against a methodology of this kind, and misreading it mis-benchmarks the chain by 40%. Google reports the median Gemini text prompt at 0.10 Wh narrow and 0.24 Wh comprehensive. The published table separates two effects:
+
+Boundary term \= 0.24 ÷ 0.14 \= **× 1.71** `(accelerator → host → idle → facility) Facility-sample term = 0.14 ÷ 0.10 =` **× 1.40** (fleet average vs. top-decile-efficiency sites) Product \= × 2.40
+
+The uplift chain in §7.3 is a boundary term and is benchmarked against **1.71, not 2.40**. The residual 1.40 is a facility-efficiency selection effect, handled separately and conservatively by the PUE default in §10.1.
+
+## 7.2 The host term, decomposed
+
+The adopted host uplift is decomposable into a **measured** component and a **documented** remainder. This is new in v2.0 and replaces a single literature-derived pick.
+
+**First-party measurement.** RAPL telemetry on an 8-accelerator Blackwell-class node establishes that host platform power — CPU packages plus DRAM — behaves as a **near-constant offset of approximately 366.5 W, with a coefficient of variation of 3.9%**, independent of accelerator count and independent of load. It is an additive constant, not a ratio. That matters structurally: expressed as a multiplier, the CPU+DRAM contribution therefore *shrinks* as accelerator power rises, which is why a single ratio derived on one hardware generation does not transfer cleanly to another.
+
+h\_cd \= 1 \+ P\_host ÷ (N\_acc × P̄\_acc)
+
+At N \= 8 this gives **h\_cd \= 1.08 – 1.11** across current accelerator generations, a spread of only \~2% between Hopper and Blackwell despite their different TDPs — the offset being constant is what makes the term stable.
+
+**The remainder.** CPU and DRAM are not the whole host. NICs, PSU conversion losses, fans, storage and chassis constitute the balance, and on metered H100 nodes CPU+DRAM is only **13–16%** `of total non-accelerator load (366.5 W against 2,300–2,800 W). The remainder is therefore ≈` **× 1.35 – 1.39**, from the metered-node and reference-architecture evidence in §7.1.
+
+`h = h_cd × h_rest ≈ 1.10 × 1.36 =` **1.50**
+
+The adopted value is unchanged. What changes is its status: it is now part measured and part documented, rather than a single pick from a literature range, and each component can be revisited independently as evidence improves.
+
+**A boundary caution this decomposition surfaces.** A published non-accelerator overhead figure derived from *processor telemetry alone* is a CPU+DRAM figure, not a host figure, and will land near 1.08–1.11 for structural reasons. Where a source reports a non-accelerator share in that range, confirm what its measurement boundary covered before adopting it as a full host term. This applies with particular force to novel hardware classes (§7.4), where measurement studies are scarce and a single published figure may be the only one available.
+
+## 7.3 Adopted position
+
+| Factor | Value | Basis |
+| :---- | :---- | :---- |
+| Host uplift | × 1.50 GPU-served / × 1.43 TPU-served | `GPU: measured CPU+DRAM component (1.08–1.11) × documented platform remainder (≈1.36); corroborated by the metered H100 range and Epoch’s 1.53. TPU: Google’s disclosed production fleet figure, used directly as first-party data` |
+| Idle / provisioned capacity | × 1.10 | Google Gemini fleet: idle machines add \~10% on top of active. Cross-checks: A100 draws \~85 W idle against 400 W TDP (\~21%); Oviedo et al. (2026) independently adopt × 1.10 for provisioned idle capacity in production H100 serving |
+| PUE | × 1.45 | §10.1. US data-center average, not a hyperscaler figure, because in-scope workloads cannot be attributed to provider-owned campuses |
+| **Combined, GPU-served** | **× 2.39** | 1.50 × 1.10 × 1.45 |
+| **Combined, TPU-served** | **× 2.28** | 1.43 × 1.10 × 1.45 |
+
+Sensitivity band: 1.43–1.82 on the host term, widening to 2.22 if the TPU fleet range is carried, and by a further × 1.14 at the upper end if data-center networking is included.
+
+**Internal consistency check.** Google states a scaling of 1.72 must be applied to active accelerator energy to capture production serving energy. Substituting Google’s own inputs into this chain — host 1.43, idle 1.10, fleet PUE 1.09 — returns **1.71**, agreeing within rounding and validating the chain’s structure. The adopted factors exceed Google’s own chain through two deliberate margins: for GPU-served, both the host term (1.50 against 1.43, on NVIDIA-metered evidence) and PUE (1.45 against 1.09, on the non-attribution argument). For TPU-served the host margin is retired, since 1.43 is first-party data for the hardware in question, leaving 2.28 ÷ 1.71 \= 1.33, which is exactly 1.45 ÷ 1.09.
+
+## 7.4 Hardware classes outside the benchmarked pool
+
+Some tools serve on accelerator classes CLEER does not cover — wafer-scale systems, custom inference ASICs, or any architecture whose power and throughput behavior does not map onto the GPU benchmarking grid. Some report no tokens at all, only a bundled vendor billing unit. A general pattern applies rather than a per-class factor.
+
+**Rule.** Where a tool’s serving hardware falls outside the benchmarked pool, or where the vendor reports only a bundled unit:
+
+1. **Do not force the token chain.** Estimating tokens for a bundled unit and applying a GPU intensity imports two errors at once. Derive energy per billing unit from hardware physics and published measurements for that class instead.
+
+2. **Decompose the unit into its physical legs.** A bundled vendor unit typically comprises accelerator inference plus other compute — a sandbox environment, orchestration, storage. Each leg takes its own host uplift and its own embodied factor; they run on different hardware, often in different facilities. Applying an accelerator-class overhead to a general-purpose cloud instance is a category error even where the magnitudes happen to be close.
+
+3. **Triangulate against an independent route.** A second derivation built on different physics — capacity occupancy, published task-level measurements, or vendor billing economics — is the primary evidence for a line that cannot be validated against the benchmark grid. Convergence between two independent routes is what makes such an estimate defensible; a single unvalidated chain is not.
+
+4. **Carry the modeled inputs as distributions where they are skewed.** Where the dominant inputs are right-skewed, a symmetric mean ± SD band misrepresents both ends and can go negative at two standard deviations. Take the band as the corresponding percentiles instead (§13.1).
+
+5. **Name the dominant unmeasured input explicitly**, and state what disclosure would resolve it.
+
+**Uplift factors for such classes** are established the same way as §7.2: measured where a study exists, documented remainder where not, with the measurement boundary of any published figure confirmed before adoption. Where the only available figure derives from processor telemetry, treat it as a floor per the caution in §7.2.
+
+# 8. Embodied carbon of IT hardware
+
+Embodied hardware carbon is material in every lifecycle study reviewed. Mistral’s LCA — the first standards-conformant assessment of a production AI model, to the GHG Protocol Product Standard and ISO 14040/44 — places hardware embodied impacts at \~11% of lifecycle GHG.
+
+## 8.1 Primary source
+
+NVIDIA publishes cradle-to-gate product carbon footprints for HGX baseboards, critically reviewed in conformance with ISO 14067, performed by WSP, built on primary supplier data covering over 90% of the product by weight. For an assurance context this is the strongest available provenance for the hardware class in scope.
+
+| Baseboard | Cradle-to-gate | Per accelerator | Dominant contributors |
+| :---- | :---- | :---- | :---- |
+| HGX H100 (8 × H100 SXM, 640 GB HBM3) | 1,312 kgCO₂e | 164 kgCO₂e | Memory 42%, ICs 25%, thermal 18% |
+| HGX B200 (8 × B200 SXM6, 1.4 TB HBM3E) | 2,274 kgCO₂e | 284 kgCO₂e | Memory 49%, ICs 28%, thermal 12% |
+
+**Corroboration.** Three independent A100 assessments agree closely: Falk et al. (2025) at 141 kgCO₂e cradle-to-grave from physical teardown, Boavizta’s bottom-up model at 143, and the ADEME GPU LCA (Lees-Perasso et al., 2026\) at 142 — within 1% of each other, using different methods and background databases. All sit 13–22% below NVIDIA’s per-H100 figure, the direction expected given doubled HBM capacity and a denser node.
+
+**A disclosed divergence.** The same ADEME study ran its parametric model on the H100 SXM 80GB and compared it directly against NVIDIA’s PCF. It returns **235 kgCO₂e** per card cradle-to-gate excluding the baseboard, against NVIDIA’s 164 including a pro-rata baseboard share — approximately 43% higher on a narrower scope. The study attributes the divergence to background database selection rather than inventory differences, noting the same A100 die is roughly twice as impactful in NegaOctet as in the IMEC NETZERO dataset NVIDIA’s assessment is believed to use. **No adjustment is made**: moving a critically reviewed ISO 14067 figure toward an unreviewed parametric model would trade data with the strongest provenance for a less certain number. The exposure is disclosed as a directional limitation on the primary source and carried in §13.2.
+
+## 8.2 Two boundary gaps
+
+The PCFs cannot be used as published: they are baseboard-scoped and cradle-to-gate.
+
+**Gap 1: the host tray is not in the baseboard.** The PCF covers accelerators, NVSwitch, interconnects, PCB and thermals. It does not cover CPUs, system DRAM, storage, chassis, PSUs and fans.
+
+| Anchor | Host share |
+| :---- | :---- |
+| Google TPU v5e (tray-level split: 2 × 747 accelerator \+ 782 host \= 2,277 kgCO₂e) | 34.4% — first-party, TPU-served only |
+| Boavizta / EcoLogits, 8×A100 server (AWS p4de.24xlarge) | 72.4% |
+| EcoServe (Li et al., Cornell / Azure / NVIDIA Research, 2025), independent bottom-up via Dell R740 LCA \+ ACT \+ SCARIF | \~75%, corroborated across a broader SKU survey |
+
+Two methodologically distinct GPU-specific studies converge at 72.4–75%. **Adopted: a hardware-class split** — × 1.52 for TPU-served (Google’s own tray split, first-party for the hardware in question), **× 3.62** `for GPU-served (the conservative pick of the two converging anchors, carried unrounded since rounding the host share to 72% shifts it by 1.4%). Applied to the H100 baseboard: 1,312 × 3.62 ≈ 4,753 kgCO₂e per 8-accelerator machine pre-distribution.`
+
+*Considered and not adopted:* the ADEME rack teardown, implying a \~13% host share. Its inventory covers chassis, PCB, NVLink connectors and one processor only — no system DRAM, storage, PSUs or fans — so it is a partial enclosure, not a host tray in the sense used by the three anchors above. Recorded so the divergence is on the record.
+
+**Gap 2: distribution to the data center is excluded.** The 0.4% transport line in the PCF is inbound material transport inside cradle-to-gate; shipping the finished baseboard to site sits outside it. Three sources model this leg, all assuming air freight — the documented mode for accelerator hardware on cluster-buildout timelines, where lead time binds.
+
+| Source | Implied uplift on manufacturing |
+| :---- | :---- |
+| Falk et al. (2025), air freight from Shenzhen | × 1.09 – 1.14 |
+| Google TPU LCA (471 kgCO₂e on a 2,277 kgCO₂e machine) | × 1.21 |
+| ADEME GPU LCA (9,570 km air freight, 20% packaging allowance) | × 1.06 (L4) – 1.15 (H100 SXM) |
+
+At 12–21% of embodied hardware, and embodied at \~10–25% of lifecycle emissions, distribution lands at \~1.2–5% of the total — at or above threshold, and not absorbable silently. **Adopted: × 1.12**, inside the Falk-implied range, below Google’s, bracketed by ADEME’s. The conservatism claim is specific: this is the lower portion of the air-freight evidence range, not an assumption of a cheaper transport mode.
+
+## 8.3 The assembled stack
+
+| Step | GPU-served | TPU-served |
+| :---- | :---- | :---- |
+| 1\. Accelerator baseboard | 1,312 kgCO₂e (H100) | — |
+| 2\. Host tray uplift | × 3.62 | × 1.52 |
+| 3\. Distribution uplift | × 1.12 | included in Google total |
+| **Embodied per machine** | **`≈ 5,325 kgCO₂e`** `(≈ 665 per accelerator)` | **`≈ 2,748 kgCO₂e`** |
+| 4\. Amortization | **`≈ 90 gCO₂e/kWh`** accelerator energy | **`≈ 47 gCO₂e/kWh`** accelerator energy |
+
+**Amortization.** Embodied machine carbon is converted to an intensity per kWh of accelerator energy — the form that applies directly to CLEER output — by dividing by lifetime accelerator-hours at an assumed average utilization:
+
+> I\_emb \= M ÷ (L × 8,760 × P̄\_tray × TDP\_tray)
+
+At the adopted 3-year life and 40%-of-TDP average draw (both justified below), this returns ≈ 90 gCO₂e/kWh for GPU-served hardware and ≈ 47 gCO₂e/kWh for TPU-served, where the TPU figure needs no separate tray-power estimate since it carries through Google's own machine total directly. The full derivation of P̄\_tray, its empirical range and the sensitivity band around both figures is in §12 Step 5, alongside the per-period formula this feeds into; the two life-and-utilization assumptions justified in the remainder of this section are what the §12 figure is built from.
+
+**Hardware lifespan.** Embodied carbon per accelerator-hour scales inversely with lifespan, and the practitioner range moves the term by up to 2×: Falk et al. 3 years, EcoLogits 5, Google 6 (accounting convention), Watershed 4–6, AWS 6 (disclosed depreciation). None is well evidenced. Falk et al.’s 3 years traces to a 2.8-year mean time between failure in Ostrouchov et al.’s Titan study — a failure-event statistic the authors attribute to a batch-specific defect, not generic wear-out. Google’s 6 is an internal convention applied uniformly across five TPU generations, which establishes consistency, not validation. Titan cannot corroborate it: the newer generation has no observed data past \~3 years, and 6-year survival among older units ranges from \~90% (best-cooled) to \~10–15% (worst-cooled). The ADEME study independently adopts 3 years and adds that operators interviewed gave service lives of 2 to 4\.
+
+**Adopted: 3 years**, with a 3–6-year sensitivity band. This is a conservatism choice, not an empirical claim: a shorter life amortizes over fewer accelerator-hours and raises the reported footprint. It is also the one horizon the data support without qualification — Titan survival exceeds \~95% at three years across every cooling position and both batches. Revisited as fleet survival data on H100-class hardware emerges.
+
+# 9. Data-center construction
+
+Google’s TPU LCA provides the only provider-primary data relating construction to operational emissions. The ratio is **1.9% of location-based operational emissions, stable across all five TPU generations** (v4i, v5e, v6e, v4, v5p), above the 1% threshold, so the source is included. Google amortizes over 20 years and allocates pro rata to energy; site infrastructure including coolant and power systems is in scope — building structure plus MEP.
+
+**Reconciling with Carbon Trust.** Carbon Trust’s analytical test returns 0.51% (medium) and 0.14% (high), below threshold. The two are not in conflict once assumptions are compared: Carbon Trust amortizes over 60 years against Google’s 20, and that factor of three accounts for most of the gap. Carbon Trust’s own stress case at 12-year building life moves its high scenario to 0.75%, in the same direction. Carbon Trust’s stated best practice is that the source should normally be included and excluded only where immateriality is demonstrated.
+
+**Independent cross-check, same unit.** `Carbon Trust’s non-Google construction intensity of 117 kgCO₂e/m²/year over 60 years, converted with its own paired 5 kW/m² at 50% utilization, gives ≈ 5.3 gCO₂e/kWh against the Google-derived ≈ 7. Two organizations, unrelated primary data, within ~30%.`
+
+**Adopted:**
+
+**k\_c \= 7 gCO₂e per kWh of facility electricity**, applied post-PUE
+
+Expressed as an intensity rather than a percentage deliberately: a percentage would understate the source on a low-carbon grid and overstate it on a high-carbon one, since construction emissions do not scale with the grid. Derived from Google’s five generations at its stated 2023 location-based factor of 366 gCO₂e/kWh, returning 6.88–6.96 gCO₂e/kWh.
+
+**Stated limitation.** Google describes its own treatment as a simple estimate reused from its Cloud Carbon Reporting methodology. It is not a precision figure, it reflects Google’s facilities, and it is applied here as a cross-provider proxy and disclosed as one.
+
+# 10. Energy to carbon
+
+Neither PUE nor grid carbon intensity can be established for a given request from the customer’s position. Both are measured and published by major providers, but at whole-facility or fleet level. What is missing is which data center served a given request. Both are treated as estimates inferred from the best available disclosure, and neither is presented as a known parameter.
+
+## 10.1 Power usage effectiveness
+
+| Rung | Basis |
+| :---- | :---- |
+| 1\. Preferred | Facility-specific PUE, where the provider discloses both the serving site and its PUE |
+| 2\. Fallback | Provider fleet average, applicable only where the disclosure covers the capacity actually serving the workload. **No current provider disclosure satisfies this condition** |
+| 3\. Default | **1.45**, the US data-center average from LBNL’s 2024 report |
+
+**Why a national average rather than a hyperscaler figure.** The intuitive default is a purpose-built value — Google discloses 1.09–1.10, EcoLogits adopts 1.20, Oviedo et al. model hyperscaler PUE at P5–P95 of 1.05–1.40. Adopting any requires assuming in-scope workloads are served from provider-owned, purpose-built campuses. That assumption cannot be made. Frontier providers increasingly serve from contracted third-party capacity: CoreWeave confirmed the 1+ GW active at Q1 2026 was sourced entirely from long-term leases with data-center partners, no single landlord above 17%, with disclosed counterparties including Microsoft, OpenAI, Meta and Anthropic; Nebius and Crusoe hold comparable positions. Leased capacity is not necessarily less efficient — colocation PUEs in the low 1.1s are reported for well-sited GPU halls — but its PUE is neither published by the operator nor covered by any provider’s fleet reporting. It is **unverifiable, not known to be worse**, and under the conservatism principle an unverifiable input is not defaulted in the direction that flatters the result.
+
+The same fact governs rung 2 and §10.2: a fleet-average PUE describes the campuses a provider owns and operates, not the third-party capacity it contracts. Two parameters, one structural gap.
+
+**Considered and not adopted: a conditional structure.** A conditional rung (1.20 where no contracted-capacity exposure is documented, 1.45 where it is) was considered by analogy with the behind-the-meter rung, and rejected. Behind-the-meter generation is a rare, site-specific deviation from an assumption that otherwise holds, so a conditional trigger is coherent. Facility efficiency is the opposite: no subset of in-scope traffic has a verifiable serving facility, so a “no exposure” branch would rest on absence of evidence, and on current contracting patterns would be empty in any event.
+
+**Corroboration.** 1.45 is also the value applied in the Watershed AI emissions framework (2026), developed independently. Two frameworks arriving separately at the same US average is treated as general precedent.
+
+**Documented alternates, carried as scenarios:** `1.09 (Google fleet, measured-hyperscaler floor), 1.20 (purpose-built AI facility, EcoLogits), 1.56 (Uptime Institute global average). Against the 1.09 floor the adopted default carries a −25% downside, disclosed in §13.3 rather than absorbed.`
+
+## 10.2 Electricity carbon intensity
+
+Both location-based and market-based figures are reported throughout, neither in isolation. A four-rung ladder applies.
+
+| Rung | Basis |
+| :---- | :---- |
+| 1\. Preferred | Region-specific grid factor, where the provider discloses the serving region |
+| 2\. Fallback | Provider-disclosed fleet-average emission factor |
+| 3\. Default | **0.341 kgCO₂e/kWh** — eGRID2024 US national CO₂e total output rate (Cornerstone reconstruction; provenance below). Non-US deployments also default to the US figure absent better data, since in-scope serving capacity is concentrated in US regions |
+| 4\. Behind-the-meter override | **`≈ 0.73 kgCO₂e/kWh`** lifecycle simple-cycle gas, where a provider has documented behind-the-meter gas exposure and does not disclose gas sourcing — at this rung the grid assumption itself no longer holds |
+
+**Location- vs market-based.** Location-based is the primary inventory figure: market-based attributes for closed-model inference are not verifiable at workload level, whereas location-based rests on a published, auditable factor. This diverges from ITU-T L.1801 §8.1.3.2, which prioritizes market-based where available; reporting both resolves the divergence without arguing against the Recommendation.
+
+**Where the customer cannot evidence market-based attributes**, which is the normal case, market-based is reported **equal to location-based** with the reason stated: provider renewable-matching claims that do not reach the customer with contractual instrument documentation meeting the Scope 2 quality criteria, particularly where the provider sits two or more tiers upstream, do not support a market-based reduction.
+
+**Vintage.** eGRID is the appropriate family — EPA’s official generation-based output-rate dataset, the source GHG Protocol Scope 2 guidance points to, used by 85% of US companies reporting a Scope 2 factor source to CDP. EPA’s 2024 update had not been released as at this version. Cornerstone (Ingwersen, Morgan & Maldonado, March 2026\) ran EPA’s own published eGRID code against 2024 input data and released the output through Zenodo; that reconstruction is adopted. The choice is one of currency, not conservatism, and is disclosed as such: the 2024 data move subregion factors down roughly 3% on average, so the newer vintage *lowers* the reported figure. The factor register records the Zenodo release identifier and the March 12 2026 input-snapshot date. On publication of official eGRID2024 the official figure replaces the reconstruction; any discrepancy above 1% is investigated before re-versioning.
+
+**Rejected at any vintage: consumption-based estimates.** More current annual averages exist (a real-time tracker reports a 2025 US average nearer 0.41 kgCO₂e/kWh). They use a different methodology incorporating imports, exports and real-time modeling that is harder to audit against a fixed citable release; they measure a different quantity, being a delivered estimate rather than an output emission rate at generation; and reconciling would require a transmission-loss adjustment this methodology does not otherwise make.
+
+**The default understates, and this is disclosed.** A study of 2,132 US data centers found their carbon intensity exceeded the US average by 48%, with \~56% of electricity from fossil plants and \~95% of facilities sited in above-average-intensity areas. AI compute concentrates in exactly these regions. The default is auditable but likely low, and a better figure is unobtainable at current disclosure levels.
+
+### Behind-the-meter generation
+
+Behind-the-meter generation breaks the assumption every grid factor depends on — that the electricity came from a measured grid — which is why it is a distinct rung rather than a variant of the default. It is no longer hypothetical and it touches tools in most enterprise registers.
+
+The distinction between running generation on site and contracting for capacity that does is not meaningful here: in both cases the electricity serving the workload is not described by any published grid factor, and in both the provider has contracted for the arrangement. Documented examples span both patterns, including large aeroderivative turbine fleets at US hyperscaler and AI-lab campuses, reciprocating-engine installations, and contracted capacity at heavily documented self-generating sites.
+
+**Evidence basis, and its limits.** No provider discloses on-site generation at facility level. Exposure is established from the public record: air-permit applications, interconnection and utility filings, equipment procurement, local reporting and civil-society monitoring — sound for the sites it covers but not systematic. It establishes that a provider *has* behind-the-meter capacity, not what share of serving load runs on it, and it will miss or lag sites that have drawn no scrutiny. **Rung 4 is therefore applied at provider level wherever exposure is documented from any credible public source**, with the triggering evidence recorded in the factor register so each assignment is auditable back to its source.
+
+The Climate Power / Cleanview Data Center Air Pollution Tracker provides an independent systematic cross-check, recording behind-the-meter project counts and grid-connected intensity for every major AI compute provider. It is treated as corroborating secondary evidence for the rung 4 trigger, not as the derivation of any number. Its grid-connected intensities span roughly 0.32–0.41 kgCO₂/kWh across eight providers, within about 20% of the rung 3 national figure — corroborating the national average as a reasonable grid-connected substitute, and saying nothing about the behind-the-meter share.
+
+**Not a basis for blending.** Project counts are project-weighted, not load-weighted, and behind-the-meter sites are typically a provider’s largest AI campuses, so a project-share figure would understate load share even before the blending question arises. The share of serving load running behind the meter cannot be attributed from any source, so rung 4 is applied **unblended** as each affected provider’s conservative default.
+
+**Deriving the factor.** From O’Donoughue et al.’s (2014) peer-reviewed harmonization of 69 lifecycle estimates. Simple-cycle units have no waste-heat recovery, placing them in the natural gas combustion turbine class, and documented fleets cluster around the NGCT reference efficiency of 33% HHV, so the harmonized median is taken directly:
+
+NGCT lifecycle median \= 670 gCO₂e/kWh (33% HHV, GWP-100, IQR 570–750)
+
+This embeds \~1.3% methane leakage. Two measurement-based studies establish that understates real-world rates: Alvarez et al. (2018, *Science*) measured 2.3% nationally, \~60% above the EPA inventory; Zhang et al. (2020, *Science Advances*) measured 3.7% in the Permian Basin, the source of the cheap stranded gas making on-site generation attractive. Applying the paper’s own project-adjustment method:
+
+`GHG(project) = 670 + 0.99 × 60 × (ML − 1.3) Headline at 2.3%:` **730 gCO₂e/kWh** `Permian sensitivity at 3.7%: ≈ 813 gCO₂e/kWh`
+
+At \~0.73 kgCO₂e/kWh the fallback is roughly twice the national grid average it replaces. Conservative but not maximalist: the leakage coefficient of 60 is NGCC-derived and physically understates NGCT’s sensitivity, which is closer to \~93 and would give \~760; and the harmonization uses AR4 GWP-100, so updating to AR5/AR6 would raise the methane term a further \~12–20%. Both push upward, so 730 is a defensible floor rather than a ceiling.
+
+**Scope.** Applies only to providers with documented exposure; others retain the grid default. It is a fallback for a known exposure, not a blanket gas assumption. A provider can displace it downward by disclosing real generation data, which places the burden of proof where it belongs and gives a concrete disclosure request.
+
+# 11. Model development
+
+A provider expends energy on two distinct activities: answering the requests a customer sends, and creating the models that answer them. Sections 6 to 10 quantify the first. This section quantifies the customer’s share of the second and places it inside the reported figure.
+
+## 11.1 What the term covers
+
+Model development is all computing a provider uses to produce and improve the models it sells. It comprises the final training run of each released model, post-training and reinforcement learning, experimental and de-risking runs, synthetic-data generation, evaluation, models that are never released, and basic research.
+
+The final training run is a minority of this. Epoch AI’s decomposition of published company spending places it at 9.6% of development compute for OpenAI in 2024, 22.6% for MiniMax and 12.3% for Z.ai. SemiAnalysis, working from compute allocation rather than spending, reports a lab-level split of approximately 50% research, 10% final training and 40% serving, which places the final run at about 17% of development. A treatment restricted to the final training run therefore captures between a tenth and a quarter of the quantity, and would not meet the emission-factor completeness recommendation in Revision A5 of the Scope 3 Standard revision.
+
+## 11.2 Basis of allocation
+
+The customer’s share of a provider’s development energy is taken to equal its share of that provider’s output. This is the reporting-company allocation described in Box 8.2 of the Scope 3 Standard: total supplier emissions, multiplied by the reporting company’s share of the supplier’s total production. Output is measured in tokens, a physical factor, which §8.3 of that standard prefers to an economic one. A single allocation factor governs the serving and development components alike, as §8.3 requires within a system.
+
+The allocation is period-matched. Development energy a provider expends in a reporting period is allocated across the output it serves in that period. No forecast of a model’s future service life is required, and none is made. Across successive periods this allocates development energy exactly once, with no residual to reconcile and no revision of previously reported periods.
+
+This follows from the standard being applied. The Corporate Standard accounts for and reports emissions annually; Bashir et al. (2026) confirm that it does not amortize, and identify the Product Standard and ISO 14067 as the frameworks under which an upfront burden is spread across the units it will eventually produce. A per-unit product footprint would amortize a model’s training over its service life and would exclude the provider’s wider research program. That is a different question with a different answer, and it is not the question a corporate inventory asks.
+
+## 11.3 The ratio d
+
+d is the ratio of a provider’s model-development energy to its request-serving energy over a reporting period. For a provider v, development accelerator energy is E\_dev(v) \= d(v) × E\_acc(v), where E\_acc(v) is the §6 serving accelerator energy summed across that provider’s models.
+
+| Source | Basis | d | Grade |
+| :---- | :---- | :---- | :---- |
+| Epoch AI | Anthropic 2025: $4.1bn dev vs $2.7bn serving | 1.52 | B |
+| SemiAnalysis | Lab compute: \~50% research, 10% training, 40% serving | 1.50 | C |
+| Adopted | The two estimates agree to within 2% | 1.5 | — |
+
+The Epoch AI figure (2026) is reconstructed from Anthropic’s reported revenue, gross margin and research and development expense for 2025\. The SemiAnalysis figure (2026) is derived from how a laboratory divides its accelerators. Two methods that share no inputs return the same value; that convergence, rather than the precision of either figure alone, is what supports the adopted value.
+
+A single value is applied to every provider. Values calculated per provider differ by about 16%, against a relative uncertainty on each of about 53%; the difference between providers is a third of the uncertainty within either, so the two cannot be distinguished, and presenting them separately would assert a precision the evidence does not support. The factor register retains one row per provider, so that a provider publishing a specific figure can be moved to it without disturbing the rest.
+
+The direction of travel is upward, not downward. SemiAnalysis reports that laboratories are already allocating a rising share of accelerator capacity to development, on the reasoning that the return on internal use exceeds the return on serving the same capacity externally. The value is reviewed quarterly for this reason (§13.4).
+
+## 11.4 Provider classification
+
+Revision A8 of the Scope 3 Standard revision restricts corporate-level allocation to homogeneous value-chain partners. Anthropic and OpenAI are homogeneous within the meaning of Box 7.4: their operations consist substantially of developing and serving language models, with emissions intensity uniform across the business. Diversified providers fall outside that permission, and a more granular level is required for them.
+
+Google published a 60 / 40 split of inference to training for its machine-learning fleet for the three years to 2022\. That figure is first-party and energy-denominated, a stronger measurement basis than any other observation relied on here. It is nonetheless not applied. It covers Google’s entire machine-learning estate, most of which is search ranking, advertising and recommendation serving — large inference workloads carrying little frontier development behind them — and is therefore not representative of a frontier model line. Section 7.3 of the Scope 3 Standard scores technological and temporal representativeness alongside reliability, and the figure fails on both. It is recorded as the lower bound of the range.
+
+No provider is excluded for want of a specific figure. A provider without one takes the adopted value and the data level is recorded accordingly. A provider that publishes nothing must not receive a lower figure than one that does.
+
+## 11.5 Application in the chain
+
+d applies to serving accelerator energy, before the uplift chain of §7. Development energy then carries the host uplift and PUE but not the idle uplift. The idle term covers serving capacity held ready to meet latency requirements (§7.3); development work is scheduled and holds no equivalent reserve. The two chains are × 1.50 × 1.10 × 1.45 \= × 2.39 for serving, and × 1.50 × 1.45 \= × 2.18 for development, GPU-served.
+
+Development energy is converted to carbon at the serving region’s grid intensity, because no provider discloses where model development is performed. This is a declared simplification, carried as a §13.2 scenario row rather than left implicit. Embodied IT hardware and data-center construction apply to development energy on the same basis as serving energy.
+
+## 11.6 Open-weight models
+
+Where a provider serves a model it did not build, d for that provider applies, and will be small: an inference host performs little development of its own. The energy the model’s builder expended in training it is not allocated. The customer has no transactional relationship with that party and consumes none of its output, so no allocation basis exists, and folding it into d would allocate one company’s emissions using another company’s output share. It is quantified from published training compute and reported as an excluded amount with the reason stated, meeting the requirement in Revisions B1 and B2 to quantify a source before excluding it.
+
+## 11.7 Measurement basis and direction of error
+
+The values adopted are ratios of compute spending, not of energy. Development and serving are procured on different terms and run at different sustained utilization, and both differences run the same way: a dollar of development compute buys more accelerator-hours, and draws more power per hour, than a dollar of serving compute. d therefore understates the energy ratio. No correction is applied, because no source relied upon quantifies the gap. Obtaining a defensible conversion, or a provider disclosure stated in energy terms, is the single change that would most improve this factor.
+
+One assumption runs the other way. Embodied intensity is derived at an assumed 40% average tray power (§12); development hardware runs materially harder, so the intensity properly applicable to development energy is lower than the value applied, and that term is overstated. The two errors are opposed. Both are disclosed rather than one being corrected and the other left in place.
+
+# 12. The assembled calculation
+
+Everything except the period’s token counts is fixed at methodology level and versioned in the factor register.
+
+**Step 1 — serving accelerator energy. For each model m:**
+
+E\_acc(m) \= Tᵢₙ(m)·ēᵢₙ(m) \+ T\_c(m)·r(m)·ēᵢₙ(m) \+ Tₒᵤₜ(m)·ēₒᵤₜ(m) E\_acc \= Σₘ E\_acc(m)
+
+Step 2 — development accelerator energy. For each provider v: E\_dev(v) \= d(v) × E\_acc(v), with d \= 1.5 (§11.3). E\_dev \= Σᵥ E\_dev(v)
+
+**Step 3 — facility energy.**
+
+E\_fac \= E\_acc × 1.50 × 1.10 × 1.45 \+ E\_dev × 1.50 × 1.45 (GPU-served) E\_fac \= E\_acc × 1.43 × 1.10 × 1.45 \+ E\_dev × 1.43 × 1.45 (TPU-served)
+
+Idle and PUE are universal cross-provider defaults; only the host term is hardware-class-specific. The idle uplift applies to serving energy alone, for the reason given in §11.5.
+
+**Step 4 — operational emissions. Operational (LB) \= E\_fac × CI, with the rung recorded per provider. Market-based reported alongside.**
+
+**Step 5 — construction. Construction \= E\_fac × k\_c, k\_c \= 0.007 kgCO₂e/kWh, applied post-PUE.**
+
+**Step 6 — embodied IT hardware. Expressed per kWh of accelerator energy so it applies directly to CLEER output:**
+
+I\_emb \= M ÷ (L × 8,760 × P̄\_tray × TDP\_tray) Embodied \= (E\_acc \+ E\_dev) × I\_emb
+
+M is 5,325 kgCO₂e GPU-served or 2,748 TPU-served (§8.3). L is 3 years, applied to both classes since its evidentiary basis does not vary by vendor.
+
+\*\*P̄\_tray**, average tray power over life as a share of the 8-accelerator tray’s 5.6 kW TDP.** Default 40%\*\*, set below the midpoint of the empirical range: a production inference deployment using continuous batching is reported moving from 22% to 68% utilization upon optimization. Landing below the midpoint preserves the conservative reading, since a lower assumed draw carries the same embodied mass over fewer lifetime kWh and raises I\_emb.
+
+At the default: **`I_emb ≈ 90 gCO₂e/kWh`** accelerator energy, GPU-served; **`≈ 47`** TPU-served
+
+Sensitivity: 164 g/kWh at 22% TDP, 53 at 68%, 36 at a 100%-utilization structural floor.
+
+*Not used:* survey figures reporting \~5% average enterprise GPU utilization across general Kubernetes clusters. That measures general enterprise deployments, not hyperscaler frontier-model serving fleets under continuous cost pressure; adopting it would understate P̄\_tray for a population-mismatch reason, not a conservatism one. Nor is the default contradicted by production node-power figures centered on 70% of maximum draw: those are instantaneous power while actively serving, whereas P̄\_tray is average tray power across the entire installed life, including provisioned-but-idle periods accounted for separately on the energy side.
+
+**Step 7 — reported total.**
+
+Reported (LB) \= Operational \+ Construction \+ Embodied
+
+The model-development component is disclosed within the reported total as a separate line, together with the data level from which d was taken (§11.4). It is not held outside the inventory.
+
+## Worked example
+
+A period with 80.3 MWh of serving accelerator energy, GPU-served, rung 3 grid factor, d \= 1.5.
+
+| Term | Calculation | tCO₂e |
+| :---- | :---- | :---- |
+| Development accelerator energy | 80.3 MWh × d 1.5 | 120.5 MWh |
+| Facility energy | 80.3 × 2.3925 \+ 120.5 × 2.175 | 454.1 MWh |
+| Operational (LB) | 454.1 MWh × 0.341 kg/kWh | 154.9 |
+| DC construction | 454.1 MWh × 7 g/kWh | 3.2 |
+| Embodied IT | 200.8 MWh × 90 g/kWh | 18.1 |
+| **Reported total (LB)** |  | **176.1** |
+| of which model development | disclosed within the total | 102.0 |
+
+Model development contributes 102.0 tCO₂e, 58% of the reported total. Construction lands at 2.1% of operational and 1.8% of the total; embodied at 10.3% of the total, in line with Google’s \~10% rule of thumb, the \~8% location-based share Jouppi et al. (2026) report for Ironwood, and Mistral’s 11% cross-check.
+
+## Boundary integrity checks
+
+Five non-overlap conditions hold by construction:
+
+1. CLEER estimates accelerator energy only. The host, idle and PUE uplifts each cover a component CLEER does not estimate, so no term is counted twice.
+
+2. The idle uplift covers provisioned-but-idle machines; CLEER’s batching and utilization modeling covers energy within active serving. The terms are disjoint.
+
+3. Host uplift components (fans, PSU losses, storage) are IT load, inside the numerator of the IT energy PUE scales, so host and PUE do not overlap.
+
+4. NVIDIA’s 0.4% PCF transport line is inbound material transport inside cradle-to-gate; the §8.2 distribution uplift covers the separate gate-to-site leg. Construction applies to facility kWh post-PUE; embodied IT applies to accelerator kWh pre-uplift. Neither is scaled twice.
+
+5. Development energy is disjoint from all serving energy. d is a ratio of a provider’s development compute to its serving compute, and is applied to serving accelerator energy before any uplift, so no facility term is applied twice and no serving energy is counted as development.
+
+**Per-period inputs:** token counts by model via the activity bridge; the CLEER intensity table version; the tool, factor and model-coverage register versions. Nothing else changes between periods unless a §13.4 trigger fires.
+
+# 13. Uncertainty
+
+The inventory reports a **single central estimate**, as the GHG Protocol Corporate Standard requires. Uncertainty is not embedded in the reported figure. Conservatism enters through factor selection, not through reporting upper bounds: inflating the reported value beyond the central estimate violates the accuracy principle as surely as understating it.
+
+Two tracks are distinguished because the two kinds of uncertainty propagate differently.
+
+## 13.1 Track 1 — statistical uncertainty in the CLEER estimates
+
+u(E\_acc(m)) \= Tᵢₙ(m)·σᵢₙ(m) \+ T\_c(m)·r(m)·σᵢₙ(m) \+ Tₒᵤₜ(m)·σₒᵤₜ(m)
+
+**Cached tokens.** The middle term carries r(m) × σᵢₙ(m), not r(m) × the cached mean — see §4.5. Where cached tokens carry a large share of energy, which is typical of agentic and long-context tools, mis-propagating this term materially suppresses the band.
+
+**Why linear in token count.** σ can be read two ways, and they propagate in opposite directions. If σ were query-to-query dispersion, individual queries would be independent draws, uncertainty on their sum would grow only as σ√N, and relative uncertainty would vanish at scale. At production volumes that component is negligible: it averages away. What remains, and what the inventory carries, is **model-level calibration error with the same sign for every token of that model**. It does not average down; it scales linearly with volume, giving relative uncertainty σ/ē constant in T. This is consistent with how σ is constructed — it carries the clustering match, the EP8 extrapolation and percentile variability, all model-level, not query-level.
+
+**Across models.** The correlation structure of CLEER’s errors across models is not established: models share calibration sources, a common donor pool and common assumptions, so independence cannot be assumed. Rather than defend a partial-correlation model, the bounding case is adopted — absolute uncertainties summed linearly, equivalent to perfect correlation:
+
+u(E\_acc) \= Σₘ u(E\_acc(m))
+
+**No confidence percentage is claimed, and this is deliberate.** Coverage of this band depends on the correlation structure. Under perfect correlation it is one standard deviation, \~68% coverage. Under independence the same absolute band is typically 2–2.5 sigmas, \~95–98% coverage. No partial-correlation model is asserted. The band is reported as a **bound with its construction described**, which is a stronger and more defensible claim than a confidence interval that cannot be substantiated. A reported band should be labeled accordingly and not described as a confidence interval.
+
+**Skewed distributions.** Where a line’s underlying inputs are right-skewed rather than symmetric — typical of §7.4 hardware classes with lognormal token or energy terms — a symmetric mean ± σ band misrepresents both ends and can go negative at two standard deviations. Take the band as the 15.87th and 84.13th percentiles instead, which correspond to ±1σ on a symmetric distribution, so the label stays consistent across lines while respecting the shape. Where closed-form percentiles are needed, a moment-matched lognormal (Fenton–Wilkinson) is acceptable if validated against simulation and its direction of error disclosed.
+
+**Aggregation across tools.** Low, central and high are summed directly. Root-sum-square would produce a narrower band; the direct sum is the conservative convention and is applied consistently.
+
+## 13.2 Track 2 — systematic uncertainty
+
+The idle factor, PUE, networking treatment, grid intensity, hardware lifespan, embodied accelerator term, the model-development ratio d, and activity-data selections are not random variables. They are selections among defensible alternatives, and any error is identical across all models and tokens. They are presented as discrete scenarios, not folded into a statistical distribution.
+
+**Activity-data uncertainty belongs here, not in Track 1\.** This is new in v2.0. Where a reporting period is incomplete and volumes are back-cast (§5.2 element 4), or where a bridge parameter is selected from a defensible range, the resulting exposure is a *selection*, not a dispersion. Stacking it into the statistical band would combine two incompatible quantities. Recorded as Track 2 scenario rows instead, typically:
+
+* the back-fill baseline window, where a trend in the driver ratio makes the choice consequential;
+
+* the back-fill ratio treatment, flat versus trend-corrected;
+
+* material bridge parameters where the source evidence supports a range, with the fallback position named.
+
+Each row states the modeled share of the period it affects, so a reviewer can see the exposure without re-deriving it. Where the back-cast covers a large share of the period, this is often the largest Track 2 item and should be presented first.
+
+**Not repeated here:** grid carbon intensity, scenario-tested under the §10.2 ladder; and the host term for TPU-served workloads, which §7.3 resolves by hardware class using first-party data rather than treating as a range.
+
+The model-development ratio carries three Track 2 rows: the spend-to-energy conversion, which is the dominant term and is not quantified by any source relied upon (§11.7); the grid basis applied to development energy (§11.5); and the choice of a single sector value in place of provider-specific values (§11.3). Because d multiplies the serving estimate, an error in per-token intensity propagates into both components; the two terms are correlated and are summed, not combined in quadrature.
+
+## 13.3 Scenarios
+
+Applied to the central value, one alternate per factor in each direction where a defensible alternate exists.
+
+Result \= E\_acc × (host × idle × PUE) × CI
+
+| Scenario | Chain | Δ vs. central |
+| :---- | :---- | :---- |
+| Central (adopted, GPU-served) | 1.50 × 1.10 × 1.45 | — |
+| Host at nameplate ceiling | 1.82 × 1.10 × 1.45 | \+21% |
+| Idle at highly utilized fleet | 1.50 × 1.05 × 1.45 | `−4.6%` |
+| Idle at low-utilization bound | 1.50 × 1.20 × 1.45 | \+9% |
+| PUE at measured hyperscaler fleet | 1.50 × 1.10 × 1.09 | `−25%` |
+| PUE at purpose-built AI facility | 1.50 × 1.10 × 1.20 | `−17%` |
+| PUE at global data-center average | 1.50 × 1.10 × 1.56 | \+8% |
+| DC networking included | × 1.14 on the chain | \+14% |
+| Hardware life 6 years | I\_emb halves | `−5% (approx., at a ~10% embodied share)` |
+| Compounded upper bound | 1.82 × 1.20 × 1.56 × 1.14 | \+62% |
+
+Plus the Track 2 activity-data rows relevant to the engagement (§13.2).
+
+The compounded upper bound is deliberately implausible: it requires every independent selection to be wrong in the same direction simultaneously. Even that case leaves the §4 exclusion conclusions intact.
+
+## 13.4 Maintenance
+
+Not a per-period exercise. The propagation method and scenario table are fixed at methodology level; each period requires only re-running the arithmetic on that period’s volumes. Reopened only upon:
+
+* the weighted-average relative uncertainty band shifting more than 5% from what is reported here, driven by a change in the composition of high- and low-variance models in the served mix, not by routine model addition or retirement;
+
+* a revision to the CLEER intensity table or its uncertainty ranges;
+
+* a change to any Track 2 factor selection;
+
+* the model-coverage fallback contribution exceeding 1% of reported emissions (§5.4).
+
+A preparer closing a period enters that period’s volumes into fixed propagation arithmetic and a pre-computed scenario table. A reader receives one number, a bounded band around it, and a short menu of one-factor sensitivities.
+
+# 14. Assurance guide
+
+## 14.1 Reviewer’s map
+
+Evidence grades: **A** — first-party measured, or standards-conformant third-party reviewed. **B** — peer-reviewed independent measurement. **C** — modeled, proxy, or selected from a range.
+
+| Input | Value | Grade | Source | Direction if wrong |
+| :---- | :---- | :---- | :---- | :---- |
+| Per-token accelerator energy | Per model | B | CLEER benchmarking \+ clustering (§6); validated to \<1% on DeepSeek deployment reconstruction | Two-sided; flagged per model by confidence score |
+| Host uplift, GPU | 1.50 | B | Measured CPU+DRAM offset 366.5 W (§7.2) × documented remainder; corroborated by metered H100 node and GB200 reference | Understates if accelerators ran below TDP |
+| Host uplift, TPU | 1.43 | A | Google production fleet disclosure | — |
+| Idle uplift | 1.10 | B | Google fleet; independently adopted by Oviedo et al. | Two-sided |
+| PUE | 1.45 | C | LBNL US average; deliberately not a hyperscaler figure (§10.1) | Overstates if workloads are served from purpose-built campuses |
+| Grid CI, rung 3 | 0.341 | A | EPA eGRID code, 2024 inputs, Cornerstone reconstruction | Understates — data centers run \~48% above national average |
+| Grid CI, rung 4 | 0.730 | B | O’Donoughue harmonization \+ Alvarez measured leakage | Understates; both available adjustments push upward |
+| Model-development ratio d | 1.5 | C | Epoch AI 2026 company spending reconstruction; SemiAnalysis 2026 compute allocation. Two independent methods agreeing to within 2% (§11.3) | Understates; a spending ratio does not capture the higher energy intensity per dollar of development compute |
+| Embodied, accelerator | 1,312 kgCO₂e (H100 baseboard) | A | NVIDIA PCF, ISO 14067, WSP-reviewed | May understate by \~43% per ADEME parametric comparison (§8.1) |
+| Host tray uplift | × 3.62 | B | Boavizta and EcoServe convergence at 72.4–75% | Two-sided within the 72.4–75% bracket |
+| Distribution uplift | × 1.12 | B | Three air-freight models, 1.06–1.21 | Understates if sourced from the top of the range |
+| Hardware life | 3 years | C | Conservatism call; practitioner range 3–6 (§8.3) | Overstates; 6 years halves the embodied term |
+| P̄\_tray | 40% TDP | C | Below the midpoint of a 22–68% empirical range | Overstates |
+| Construction | 7 gCO₂e/kWh | B | Google TPU LCA, five generations; Carbon Trust cross-check at 5.3 | Two-sided; ±30% between the two anchors |
+| Cache-read ratio | r(m), per model | C | Provider published pricing; a price standing for an energy ratio (§4.5) | Not established |
+| Activity data | Per tool | Varies | Tool telemetry, or bridge (§5.2) | Per bridge document |
+
+## 14.2 What to test
+
+1. **Reconcile activity data to source.** Token counts or the bridge’s input telemetry, to provider-exported reports for the period. This is the one input the customer controls and the only one with a documentary trail.
+
+2. **Confirm register versions.** The tool, factor and CLEER table versions used to produce the figure should match those recorded, and any change should be a version event, not a period adjustment.
+
+3. **Check the model-coverage statement** `(§5.4): coverage ≥ 99.9%, fallback contribution < 1%, branch applied per unmatched model.`
+
+4. **Verify no double-counting** against the four boundary integrity checks in §12.
+
+5. **Test the estimator in each bridge.** The most common defect is a percentile substituted for a mean (§5.2), which overstates by two to six times.
+
+6. **Check the cached-token treatment** on both mean and standard deviation (§4.5), since the SD rule is easy to get wrong and suppresses the reported band when it is.
+
+7. **Confirm the grid rung assignment** per provider against the evidence recorded in the factor register.
+
+Confirm the model-development treatment. d should be applied to serving accelerator energy before any uplift, the development path should omit the idle uplift (§11.5), and the component should appear as a disclosed line within the reported total rather than outside it.
+
+8. **Confirm conservatism is applied once.** It belongs in factor selection, not in the reported figure. A reported figure above the central estimate is itself a finding.
+
+## 14.3 Where the estimate is weakest
+
+Four, stated plainly rather than left to be found.
+
+**Facility attribution.** No provider discloses which site served which request, so the rung structures in §10 are a workaround, not a solution. Both PUE and grid factor inherit that gap. Remedy: serving region and facility PUE per request.
+
+**The embodied accelerator term.** Two studies of the same part differ by \~43% for reasons of background database selection, not inventory, and neither can be shown correct from the published record (§8.1). Remedy: convergence in the embodied carbon literature on background data, which is outside any party’s control here.
+
+**Hardware lifespan.** The practitioner range spans a factor of two on evidence supporting no point within it (§8.3). Remedy: fleet survival data on current-generation hardware.
+
+The model-development ratio. The values available are ratios of compute spending rather than of energy, and no source relied upon quantifies the difference between the two (§11.7). No provider in the register publishes the ratio directly. Remedy: a provider disclosure of development and serving energy, which would move the input from a sector value to a provider-specific one and from a spending basis to an energy basis.
+
+All three are **disclosure problems, not modeling problems**. Each has a specific remedy, and the methodology is built so that each disclosure, if made, replaces an estimate with an observation without altering the structure of the calculation.
+
+## 14.4 Open items
+
+| Item | Status |
+| :---- | :---- |
+| CLEER intensity table | Versioned release alongside the factor register; per-model values, σ, confidence score, matched proxy count |
+| Confidence score interpretation rule | Computation, range and scaling to be stated; pending, the score is reported without an interpretation rule and is not a probability |
+| TPU accelerator energy derivation | Pending; Google’s published production disclosure applies in the interim (§6.9) |
+| EP8 extrapolation backtest | Direct measurement on a subset, reported per model against the extrapolated figure |
+| Proxy-substitution cross-validation | Pending completion of the benchmarking grid |
+| Tool register | Populated per engagement as a versioned annex |
+
+# 15. What this methodology does and does not establish
+
+**What it is.** An estimate of greenhouse gas emissions attributable to a customer’s use of third-party generative AI services over a defined period, assembled from token counts the customer can evidence, per-token accelerator intensities measured on open models under production-representative conditions and extrapolated to closed models through architectural clustering, and a documented chain of uplift, conversion and amortization factors each traced to a primary source. It covers operational energy across accelerator, host and facility; embodied carbon of serving hardware and of the buildings housing it; and conversion to carbon on both a location-based and a market-based basis.
+
+**What it is not.** A measurement. No consumer of a closed model can measure the energy drawn by an inference request, and nothing here claims otherwise. Three parameters in particular stand in for quantities only the provider can observe: per-token accelerator intensity, the efficiency of the facility that served the request, and the carbon intensity of the electricity that facility drew.
+
+**Why it is nonetheless defensible.** Three disciplines run through the document. Every numerical claim traces to a primary source, not a secondary summary. Where a parameter cannot be resolved from the evidence it is defaulted in the direction that does not flatter the result, and the choice is labeled a conservatism call rather than presented as an empirical finding. And where the evidence is genuinely contested, the contest is disclosed in the text rather than settled silently in a spreadsheet.
+
+**Maintenance.** The methodology, its companion bridge documents and its registers are versioned together. A change to any factor is a version event, not a period adjustment, and the conditions that reopen a factor are set out in §13.4.
+
+# Appendix A. Sources relied upon
+
+| \# | Source | Status | Supplies |
+| :---- | :---- | :---- | :---- |
+| 1 | Google, “Measuring the environmental impact of delivering AI at Google Scale” (2025) | Published; internal fleet telemetry | The only first-party production per-prompt energy decomposition. Host, idle, PUE uplifts (§7); exclusions for networking, devices, storage (§4); the narrow-vs-comprehensive decomposition (§7.1) |
+| 2 | Jegham et al. (2025), “How Hungry Is AI?” | Peer-reviewed, *Communications of the ACM* | The latency-based estimation structure CLEER extends (§6.2) |
+| 3 | Artificial Analysis | Continuously updated benchmark | Percentile anchors for closed-model throughput and TTFT (§6.5) |
+| 4 | DeepSeek — V3 technical report and deployment report | Published | Production deployment configuration validating CLEER’s reconstruction to within 1% (§6.8) |
+| 5 | Strubell et al. (2019) | Peer-reviewed | Founding precedent for the accelerator \+ host boundary convention (§7) |
+| 6 | Luccioni, Jernite & Strubell (2024), FAccT | Peer-reviewed | Component-level inference measurement lineage; boundary precedent only, no multiplier derived (§7) |
+| 7 | Latif et al. (2025), IEEE Access | Peer-reviewed; physically metered 8-GPU H100 | NVIDIA-specific metered non-accelerator range and the TDP caveat (§7.1) |
+| 8 | Epoch AI — GB200 reference architecture (2025) | Published; spec-derived | Host uplift corroboration (× 1.53); networking term (× 1.14) (§7.1) |
+| 9 | Microsoft / OpenAI / NVIDIA — GB200 rack power paper (2025) | Published (arXiv) | Accelerators \> 50% of provisioned server power, bounding the nameplate ratio below 2.0 (§7.1) |
+| 10 | ML.ENERGY Benchmark — Chung et al. | Published; 46 models, 1,858 configurations, NVML-metered | Utilization alone drives 3–5× energy variation (§7.1) |
+| 11 | Oviedo et al. (2026), *Joule* | Peer-reviewed; Microsoft; bottom-up Monte Carlo | Idle/redundancy and networking terms; hyperscaler PUE distribution; production node-power bound (§7, §10.1, §12) |
+| 12 | NVIDIA DGX H100 specification | Vendor-primary | Nameplate ceiling × 1.82 (§7.1) |
+| 13 | NVIDIA — HGX H100 / B200 Product Carbon Footprints (2025) | ISO 14067, WSP critical review, \>90% primary supplier data by weight | Vendor-primary embodied carbon (§8) |
+| 14 | Schneider et al. (Google), “Life-Cycle Emissions of AI Hardware” (2025) | Published (arXiv) | Cradle-to-grave TPU LCA: construction (§9), host-tray split and transport (§8), end-of-life (§4.4) |
+| 15 | Jouppi et al. (Google), IEEE Micro (2026) | Published; Google-primary | Operational/embodied split across TPU generations (§4.4); six-year amortization convention (§8.3) |
+| 16 | Mistral AI, Carbone 4 & ADEME (2025) | First LCA of a production AI model to GHGP Product Standard and ISO 14040/44 | Embodied hardware lifecycle share, 11% (§8) |
+| 17 | Carbon Trust, “The carbon impact of AI video generation” (2026) | Published; expert working group review; SAIG participated | AI-system boundary; materiality test on building and MEP (§9); storage and network exclusion reasoning (§4) |
+| 18 | Watershed, “Estimating GHG Emissions from AI Use” (2026) | Published white paper; not peer-reviewed | Independent corporate framework converging on the same boundary and functional unit; source of the 1.45 PUE and eGRID2024 vintage corroboration |
+| 19 | Schneider Electric — White Paper 99 (2023) | Published lifecycle model | Non-GPU corroboration of the lifespan/embodied relationship (§8.3) |
+| 20 | Falk et al. (2025), A100 cradle-to-grave LCA | Published (arXiv); primary teardown, independent of NVIDIA | Embodied corroboration (§8.1); end-of-life (§4.4); distribution range (§8.2); per-hour amortization precedent; lifespan challenge (§8.3) |
+| 21 | Li et al. (Cornell Tech / Azure Research / NVIDIA Research), “EcoServe” (2025) | Published (arXiv); independent bottom-up | Third anchor for host-tray embodied share (\~75%); basis for × 3.62 (§8.2) |
+| 22 | Lees-Perasso, Ekchajzer, Roussilhe & De Latour (2026), ADEME / Hubblo / Tide | Published; eight cards dismantled, elemental analysis, EIME with CODDE and NegaOctet | A100 corroboration within 1%; the disclosed H100 divergence (§8.1); distribution range (§8.2); 3-year lifespan and operator interviews (§8.3) |
+| 23 | Ostrouchov et al. (2020), GPU lifetimes on Titan | Peer-reviewed; ORNL; 100,000+ GPU-years | 3-year survival horizon; cooling- and defect-dependence of 6-year survival (§8.3) |
+| 24 | EcoLogits / GenAI Impact, incorporating Boavizta | Published; open-source bottom-up | Host-tray embodied share (\~72.4%); 5-year lifespan data point; 1.20 PUE scenario |
+| 25 | Kim, Yoo & Chung (2026), IEEE Access | Peer-reviewed scoping review | Boundary definition, not model choice, is the dominant source of cross-study variance; source of the × 2.4 ratio decomposed at §7.1 |
+| 26 | ITU-T L.1801 (02/2026) | Published international Recommendation | Cut-off rules, functional unit, reporting requirements, location- and market-based guidance |
+| 27 | Guidi et al. (2024), US data center environmental burden | Published (arXiv); 2,132 facilities | Data-center grid intensity \~48% above national average (§10.2) |
+| 28 | O’Donoughue et al. (2014), *Journal of Industrial Ecology* / NREL | Peer-reviewed harmonization; 69 estimates | NGCT lifecycle median and proportional-adjustment method (§10.2) |
+| 29 | Alvarez et al. (2018), *Science* | Peer-reviewed; ground-based, aircraft-validated | National methane leakage 2.3% (§10.2) |
+| 30 | Zhang et al. (2020), *Science Advances* | Peer-reviewed; satellite with inverse modeling | Permian Basin leakage 3.7% (§10.2) |
+| 31 | Climate Power / Cleanview, Data Center Air Pollution Tracker | Ongoing tracker on Cleanview project data with EPA eGRID | Cross-provider behind-the-meter counts; corroborating secondary evidence only (§10.2) |
+| 32 | Nibler & Ropars (CCGrid 2025\) | Peer-reviewed | Enterprise storage constant-power measurements (§4.1) |
+| 33 | Coroamă (2021); Mytton, Lundén & Malmodin (2024) | Published / peer-reviewed | Network transmission intensity decomposition and its load-independence caveat (§4.2) |
+| 34 | Cornerstone Sustainability Data Initiative (2026) | Zenodo; EPA eGRID code on 2024 inputs; validated against eGRID2023 within 1% | Rung-3 grid default (§10.2) |
+| 35 | LBNL, 2024 United States Data Center Energy Usage Report | Published | US average PUE, rung 3 (§10.1) |
+| 36 | Epoch AI (2026), “Compute accounts for the majority of expenses of AI companies” | Published data insight; reconstructed from reported company financials | Anthropic 2025 development and serving compute spending; the primary anchor for d (§11.3) |
+| 37 | Epoch AI (2026), “Final training runs account for a minority of R\&D compute spending” | Published research note | Final training runs as a share of development compute, 9.6–22.6% (§11.1) |
+| 38 | Epoch AI (2025), “Most of OpenAI’s 2024 compute went to experiments” | Published data insight | OpenAI 2024 development and serving compute spending; range check on d (§11.3) |
+| 39 | SemiAnalysis (2026), compute allocation across AI laboratories | Analyst publication | Lab-level split of research, final training and serving; independent corroboration of d and of the direction of travel (§11.3) |
+| 40 | The Information (2026), “Anthropic Lowers Gross Margin Projection as Revenue Skyrockets” | Trade press, subscription | Confirms training costs are excluded from the gross-margin calculation from which serving-cost figures are derived (§11.3) |
+| 41 | Bashir et al. (2026), “Amortizing AI Training Carbon Footprint”, ACM SIGENERGY Energy Informatics Review | Peer-reviewed | Confirms the Corporate Standard reports annually without amortization, and identifies the Product Standard and ISO 14067 as the amortizing frameworks (§11.2) |
+| 42 | GHG Protocol (2026), Scope 3 Standard Revisions: Phase 1 Progress Update | Draft revision, not yet through public consultation | Revision A8 on allocating supplier research and development to sold product; A5 on emission-factor completeness; B1 and B2 on quantifying a source before excluding it (§11) |
+
+# Appendix B. Standards crosswalk
+
+| Dimension | This methodology | GHGP ICT Sector Guidance | ITU-T L.1801 | GSF SCI / ISO/IEC 21031:2024 | AFNOR Spec 2314 | ISO/IEC TR 20226:2025 |
+| :---- | :---- | :---- | :---- | :---- | :---- | :---- |
+| Boundary | Accelerator \+ host \+ idle \+ PUE \+ embodied IT \+ distribution \+ DC construction | Data-center services; operational \+ embodied | Full AI system lifecycle, LCA-mapped | Consumer boundary \= Operation & Monitoring | Base SCI boundary | Full AI lifecycle |
+| Functional unit | Per input, cached and output token | Per service | Per prompt / generated / thinking tokens | Consumer SCI: per token | Per unit of software | Per system-year |
+| Host CPU / DRAM | Included, × 1.50 GPU / × 1.43 TPU | Included | Included (use stage) | Included | Included | Included |
+| Idle capacity | Included, × 1.10 | Included if provisioned | Included | Included | Included | Included |
+| Embodied IT | Included, amortized over 3 years | Included | Included | Included | Included | Included |
+| DC construction | Included, 7 gCO₂e/kWh | Included | Included | Out of SCI scope | Included | Included |
+| Model development | Included; allocated by output share, disclosed within the total | Separate | Separate reporting required | Excluded from consumer SCI | Separate | Included in lifecycle |
+| Grid basis | LB primary, MB reported alongside | Both | MB prioritized (divergence disclosed, §10.2) | LB | Both | Both |
+| Uncertainty | Two tracks; single reported value | Qualitative | Required | Not specified | Required | Required |
+

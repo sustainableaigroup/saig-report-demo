@@ -1,9 +1,5 @@
 ---
 pagetitle: "AI Environmental Impact Assessment"
-format-links:
-  - format: typst
-    text: Download PDF
-    icon: file-pdf
 ---
 
 ```{=html}
@@ -29,8 +25,8 @@ format-links:
 ]
 
 #place(top + left, dx: 0.52in, dy: 0.66in)[
-  #block(width: 2.85in, fill: white, radius: 10pt, inset: 10pt)[
-    #image("assets/saig-logo.png", width: 2.28in)
+  #block(width: 3.48in, fill: white, radius: 11pt, inset: 12pt)[
+    #image("assets/saig-logo.png", width: 2.96in)
   ]
 ]
 
@@ -48,7 +44,7 @@ format-links:
 #place(top + left, dx: 0.58in, dy: 4.48in)[
   #block(width: 6.90in)[
     #set par(leading: 0.72em)
-    #text(font: "DM Sans", size: 13pt, fill: rgb("#F4F8F8"))[
+    #text(font: "Source Serif 4", size: 13.2pt, fill: rgb("#F4F8F8"))[
       A boilerplate report showing how SAIG can combine a polished web experience, hoverable references, technical graphics, and a one-click Typst PDF from the same Quarto source.
     ]
   ]
@@ -67,9 +63,9 @@ format-links:
     #grid(
       columns: (1fr, 1fr, 1fr),
       gutter: 14pt,
-      [#text(font: "DM Sans", size: 10.5pt, weight: "medium", fill: rgb("#033845"))[DEMONSTRATION]],
-      [#text(font: "DM Sans", size: 10.5pt, weight: "medium", fill: rgb("#033845"))[0.1]],
-      [#text(font: "DM Sans", size: 10.5pt, weight: "medium", fill: rgb("#033845"))[31 AUGUST 2026]],
+      [#text(font: "DM Mono", size: 9.2pt, weight: "medium", fill: rgb("#033845"))[DEMONSTRATION]],
+      [#text(font: "DM Mono", size: 9.2pt, weight: "medium", fill: rgb("#033845"))[0.1]],
+      [#text(font: "DM Mono", size: 9.2pt, weight: "medium", fill: rgb("#033845"))[31 AUGUST 2026]],
     )
   ]
 ]
@@ -82,13 +78,15 @@ format-links:
   numbering: none,
 )
 
-#show heading.where(level: 1): it => block(above: 10pt, below: 14pt)[
+#show heading.where(level: 1): it => block(above: 12pt, below: 14pt)[
+  #text(font: "DM Mono", size: 6.4pt, tracking: 0.7pt, fill: rgb("#819CA2"))[SECTION #context counter(heading).display("01")]
+  #v(4pt)
   #text(font: "Inter", size: 25pt, weight: "medium", fill: rgb("#B8663B"))[#it.body]
 ]
-#show heading.where(level: 2): it => block(above: 12pt, below: 8pt)[
+#show heading.where(level: 2): it => block(above: 13pt, below: 8pt)[
   #text(font: "Inter", size: 15pt, weight: "medium", fill: rgb("#2B6572"))[#it.body]
 ]
-#show heading.where(level: 3): it => block(above: 9pt, below: 5pt)[
+#show heading.where(level: 3): it => block(above: 10pt, below: 5pt)[
   #text(font: "Inter", size: 11.5pt, weight: "medium", fill: rgb("#2B6572"))[#it.body]
 ]
 ```
@@ -175,7 +173,7 @@ This is deliberately simplified: a production methodology would define boundarie
 ![Illustrative measurement chain from AI activity to emissions.](assets/methodology-flow.svg){#fig-boundary width=100%}
 :::
 
-Table @tbl-boundary shows how a report can make assumptions explicit rather than burying them in prose.
+@tbl-boundary shows how a report can make assumptions explicit rather than burying them in prose.
 
 | Layer | Example input | Typical evidence | Demo treatment |
 |---|---|---|---|
@@ -199,9 +197,11 @@ The figure below is intentionally synthetic, but demonstrates how a result can b
 ![Illustrative normalized inference energy index. Values are not measured findings.](assets/energy-index.svg){#fig-energy width=100%}
 :::
 
-A result like Figure @fig-energy would normally be accompanied by a traceable evidence table and sensitivity analysis. The underlying idea is supported by empirical research showing material differences in deployment energy across tasks and model architectures [@luccioni2024].
+A result like @fig-energy would normally be accompanied by a traceable evidence table and sensitivity analysis. The underlying idea is supported by empirical research showing material differences in deployment energy across tasks and model architectures [@luccioni2024].
 
-> **Design principle:** the executive reader should be able to understand the decision in thirty seconds; the technical reviewer should be able to trace every material assumption.
+::: {.callout-important title="Key finding" icon=false}
+The executive reader should be able to understand the decision in thirty seconds; the technical reviewer should be able to trace every material assumption.
+:::
 
 ## Example sensitivity table
 
@@ -268,4 +268,3 @@ Every methodological change, source update, chart revision, and client comment c
 
 For a real report, numerical outputs should come from a reproducible data pipeline rather than manually entered tables. Quarto can execute Python or R during render, but keeping calculations separate from the layout layer is often useful for review and assurance.
 
-# References {.unnumbered .unlisted}

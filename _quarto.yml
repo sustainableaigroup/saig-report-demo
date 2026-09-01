@@ -1,8 +1,11 @@
 project:
   type: default
   output-dir: docs
+  resources:
+    - report-polish.js
 
 bibliography: references.bib
+reference-section-title: References
 
 execute:
   freeze: auto
@@ -22,6 +25,7 @@ format:
     link-external-newwindow: true
     fig-cap-location: bottom
     code-fold: true
+    include-after-body: report-polish.html
 
   typst:
     brand: _brand-pdf.yml

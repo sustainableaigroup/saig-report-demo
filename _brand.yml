@@ -36,6 +36,10 @@ typography:
     - family: DM Mono
       source: google
       weight: [400, 500]
+    - family: Source Serif 4
+      source: google
+      weight: [400, 500, 600]
+      style: [normal, italic]
   base:
     family: DM Sans
     size: 11pt
