@@ -9,7 +9,7 @@ pagetitle: "AI Environmental Impact Assessment"
     <div class="saig-kicker" style="margin-top:3.2rem;">Technical report / demonstration</div>
     <h1>AI Environmental<br>Impact Assessment</h1>
     <div class="subtitle">A boilerplate report showing how SAIG can combine a polished web experience, hoverable references, technical graphics, and a one-click Typst PDF from the same Quarto source.</div>
-    <a class="pdf-button" href="index.pdf">↓ Download PDF</a>
+    <a class="pdf-button" href="index.pdf" target="_blank" rel="noopener noreferrer">↓ Download PDF</a>
   </div>
   <div class="saig-cover-meta">
     <span>CLIENT: DEMONSTRATION</span><span>VERSION: 0.1</span><span>31 AUGUST 2026</span>
