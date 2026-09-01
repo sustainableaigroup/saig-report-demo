@@ -25,6 +25,7 @@ format:
     link-external-newwindow: true
     fig-cap-location: bottom
     code-fold: true
+    format-links: false
     include-after-body: report-polish.html
 
   typst:
