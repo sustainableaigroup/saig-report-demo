@@ -1,6 +1,10 @@
 meta:
   name: Sustainable AI Group
 
+logo:
+  medium: assets/saig-logo.png
+  large: assets/saig-logo.png
+
 color:
   palette:
     monarch-orange: "#B8663B"

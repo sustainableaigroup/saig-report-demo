@@ -50,3 +50,10 @@ After pushing the repository, go to **Settings → Pages → Build and deploymen
 ## Important
 
 All numerical findings in this demo are illustrative placeholders. The cited sources are real and exist only to demonstrate citation handling and report structure.
+
+
+## Brand split
+
+- `_brand.yml`: auto-detected no-logo base brand.
+- `brand-html.yml`: HTML brand including logo.
+- `_brand-pdf.yml`: PDF brand with no automatic logo.

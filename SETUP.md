@@ -88,3 +88,10 @@ Data-centre electricity demand is an important part of AI impact assessment [@ie
 ```
 
 Quarto resolves the same citation into the HTML hover experience and the PDF bibliography.
+
+
+## Brand split
+
+- `_brand.yml`: auto-detected no-logo base brand.
+- `brand-html.yml`: HTML brand including logo.
+- `_brand-pdf.yml`: PDF brand with no automatic logo.

@@ -9,7 +9,7 @@ execute:
 
 format:
   html:
-    brand: _brand.yml
+    brand: brand-html.yml
     theme: [brand, styles.scss]
     toc: true
     toc-location: left

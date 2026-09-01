@@ -29,7 +29,7 @@ format-links:
 ]
 
 #place(top + left, dx: 0.52in, dy: 0.66in)[
-  #block(width: 2.85in, height: 0.78in, fill: white, radius: 10pt, inset: 10pt)[
+  #block(width: 2.85in, fill: white, radius: 10pt, inset: 10pt)[
     #image("assets/saig-logo.png", width: 2.28in)
   ]
 ]
@@ -247,7 +247,10 @@ Every methodological change, source update, chart revision, and client comment c
 ## What the source tree controls
 
 `_brand.yml`
-: Cross-format SAIG colors, logos, and typography.
+: Auto-detected base brand (colors and typography only; no logo).
+
+`brand-html.yml`
+: HTML-specific brand, including the SAIG logo.
 
 `styles.scss`
 : Web-only polish: hero treatment, KPI cards, spacing, responsive behavior, and table details.
