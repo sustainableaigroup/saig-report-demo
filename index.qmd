@@ -1,18 +1,18 @@
 ---
-pagetitle: "AI Environmental Impact Assessment"
+pagetitle: "CLEER Technical Report"
 ---
 
 ```{=html}
 <div class="saig-cover">
   <div>
     <div class="saig-logo-card"><img src="assets/saig-logo.png" alt="Sustainable AI Group"></div>
-    <div class="saig-kicker" style="margin-top:3.2rem;">Technical report / demonstration</div>
-    <h1>AI Environmental<br>Impact Assessment</h1>
-    <div class="subtitle">A boilerplate report showing how SAIG can combine a polished web experience, hoverable references, technical graphics, and a one-click Typst PDF from the same Quarto source.</div>
+    <div class="saig-kicker" style="margin-top:3.2rem;">Technical Report</div>
+    <h1>CLEER<br>Technical Report</h1>
+    <div class="subtitle">Estimating the energy use of closed AI model inference.</div>
     <a class="pdf-button" href="index.pdf" target="_blank" rel="noopener noreferrer">↓ Download PDF</a>
   </div>
   <div class="saig-cover-meta">
-    <span>CLIENT: DEMONSTRATION</span><span>VERSION: 0.1</span><span>31 AUGUST 2026</span>
+    <span>VERSION: 0826</span><span>29 SEPTEMBER 2026</span>
   </div>
 </div>
 ```
@@ -31,21 +31,21 @@ pagetitle: "AI Environmental Impact Assessment"
 ]
 
 #place(top + left, dx: 0.58in, dy: 2.20in)[
-  #text(font: "DM Mono", size: 7.5pt, tracking: 0.8pt, fill: white)[TECHNICAL REPORT / DEMONSTRATION]
+  #text(font: "DM Mono", size: 7.5pt, tracking: 0.8pt, fill: rgb("#242424"))[TECHNICAL REPORT]
 ]
 
 #place(top + left, dx: 0.58in, dy: 3.03in)[
-  #text(font: "Inter", size: 36pt, weight: "medium", fill: white)[AI Environmental]
+  #text(font: "Inter", size: 36pt, weight: "medium", fill: rgb("#242424"))[CLEER]
 ]
 #place(top + left, dx: 0.58in, dy: 3.66in)[
-  #text(font: "Inter", size: 36pt, weight: "medium", fill: white)[Impact Assessment]
+  #text(font: "Inter", size: 36pt, weight: "medium", fill: rgb("#242424"))[Technical Report]
 ]
 
 #place(top + left, dx: 0.58in, dy: 4.48in)[
   #block(width: 6.90in)[
     #set par(leading: 0.72em)
-    #text(font: "Source Serif 4", size: 13.2pt, fill: rgb("#F4F8F8"))[
-      A boilerplate report showing how SAIG can combine a polished web experience, hoverable references, technical graphics, and a one-click Typst PDF from the same Quarto source.
+    #text(font: "Source Serif 4", size: 13.2pt, fill: rgb("#242424"))[
+      Estimating the energy use of closed AI model inference.
     ]
   ]
 ]
