@@ -37,7 +37,7 @@ format:
       bottom: 0.72in
       left: 0.62in
       right: 0.62in
-    fontsize: 10.5pt
+    fontsize: 11pt
     keep-typ: true
     fig-cap-location: bottom
     tbl-cap-location: top
