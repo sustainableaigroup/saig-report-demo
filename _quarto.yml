@@ -22,6 +22,7 @@ format:
     link-external-newwindow: true
     fig-cap-location: bottom
     code-fold: true
+
   typst:
     brand: _brand-pdf.yml
     toc: false
