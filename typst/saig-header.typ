@@ -17,7 +17,7 @@
 }
 
 #let saig-header = context [
-  #set text(font: "DM Mono", size: 6.5pt, fill: rgb("#4F747D"))
+  #set text(font: "DM Mono", size: 7.2pt, fill: rgb("#4F747D"))
   #grid(
     columns: (1fr, 1.4fr, 1fr),
     align(left)[Sustainable AI Group],
@@ -29,7 +29,7 @@
 ]
 
 #let saig-footer = context [
-  #set text(font: "DM Mono", size: 5.9pt, fill: rgb("#819CA2"))
+  #set text(font: "DM Mono", size: 6.5pt, fill: rgb("#819CA2"))
   Sustainable AI Group
 ]
 
@@ -42,8 +42,8 @@
 #set par(justify: false, leading: 0.72em)
 
 // Refined long-document typography.
-#show figure.caption: set text(font: "DM Sans", size: 8.6pt, fill: rgb("#5D7076"))
+#show figure.caption: set text(font: "DM Sans", size: 9pt, fill: rgb("#5D7076"))
 #show table: it => block(above: 7pt, below: 10pt)[
-  #set text(font: "DM Sans", size: 8.8pt)
+  #set text(font: "DM Sans", size: 9.2pt)
   #it
 ]
