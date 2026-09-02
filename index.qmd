@@ -31,20 +31,21 @@ pagetitle: "CLEER Technical Report"
 ]
 
 #place(top + left, dx: 0.58in, dy: 2.20in)[
-  #text(font: "DM Mono", size: 18pt, tracking: 0.8pt, fill: rgb("#242424"))[TECHNICAL REPORT]
+  #text(font: "DM Mono", size: 14pt, tracking: 0.8pt, fill: rgb("#242424"))[TECHNICAL REPORT]
 ]
 
 #place(top + left, dx: 0.58in, dy: 3.03in)[
   #text(font: "Inter", size: 55pt, weight: "medium", fill: rgb("#242424"))[CLEER]
 ]
-#place(top + left, dx: 0.58in, dy: 3.66in)[
-  #text(font: "Inter", size: 40pt, weight: "medium", fill: rgb("#242424"))[Technical Report]
+
+#place(top + left, dx: 0.58in, dy: 3.3in)[
+  #text(font: "DM Mono", size: 16pt, tracking: 0.8pt, fill: rgb("#242424"))[[Closed-model Latent Energy Estimation Range]]
 ]
 
 #place(top + left, dx: 0.58in, dy: 4.48in)[
   #block(width: 6.90in)[
     #set par(leading: 0.72em)
-    #text(font: "Source Serif 4", size: 30pt, fill: rgb("#242424"))[
+    #text(font: "Source Serif 4", size: 26pt, fill: rgb("#242424"))[
       Estimating the energy use of closed AI model inference.
     ]
   ]
@@ -53,14 +54,14 @@ pagetitle: "CLEER Technical Report"
 #place(top + left, dx: 0.58in, dy: 9.20in)[
   #block(width: 7.34in, height: 0.98in, fill: white, radius: 11pt, inset: 14pt)[
     #grid(
-      columns: (1fr, 1fr, 1fr),
+      columns: (1fr, 1fr),
       gutter: 14pt,
       [#text(font: "DM Mono", size: 9.5pt, fill: rgb("#4F747D"))[VERSION]],
       [#text(font: "DM Mono", size: 9.5pt, fill: rgb("#4F747D"))[DATE]],
     )
     #v(5pt)
     #grid(
-      columns: (1fr, 1fr, 1fr),
+      columns: (1fr, 1fr),
       gutter: 14pt,
       [#text(font: "DM Mono", size: 10.2pt, weight: "medium", fill: rgb("#033845"))[CLEER-TEXT-0826]],
       [#text(font: "DM Mono", size: 10.2pt, weight: "medium", fill: rgb("#033845"))[29 SEPTEMBER 2026]],
