@@ -51,6 +51,15 @@ pagetitle: "CLEER Technical Report"
   ]
 ]
 
+#place(top + left, dx: 0.58in, dy: 6.6in)[
+  #block(width: 6.90in)[
+    #set par(leading: 0.72em)
+    #text(font: "Source Serif 4", size: 14pt, fill: rgb("#242424"))[
+      By Nidhal Jegham, Chan Young koh, Sasha Luccioni
+    ]
+  ]
+]
+
 #place(top + left, dx: 0.58in, dy: 9.20in)[
   #block(width: 7.34in, height: 0.98in, fill: white, radius: 11pt, inset: 14pt)[
     #grid(
