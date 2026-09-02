@@ -12,6 +12,7 @@ report:
   date: "29 SEPTEMBER 2026"
 
 format:
+  html: default
   typst:
     output-file: "CLEER-TEXT-0826.pdf"
 ---
