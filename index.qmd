@@ -31,20 +31,20 @@ pagetitle: "CLEER Technical Report"
 ]
 
 #place(top + left, dx: 0.58in, dy: 2.20in)[
-  #text(font: "DM Mono", size: 7.5pt, tracking: 0.8pt, fill: rgb("#242424"))[TECHNICAL REPORT]
+  #text(font: "DM Mono", size: 18pt, tracking: 0.8pt, fill: rgb("#242424"))[TECHNICAL REPORT]
 ]
 
 #place(top + left, dx: 0.58in, dy: 3.03in)[
-  #text(font: "Inter", size: 36pt, weight: "medium", fill: rgb("#242424"))[CLEER]
+  #text(font: "Inter", size: 55pt, weight: "medium", fill: rgb("#242424"))[CLEER]
 ]
 #place(top + left, dx: 0.58in, dy: 3.66in)[
-  #text(font: "Inter", size: 36pt, weight: "medium", fill: rgb("#242424"))[Technical Report]
+  #text(font: "Inter", size: 40pt, weight: "medium", fill: rgb("#242424"))[Technical Report]
 ]
 
 #place(top + left, dx: 0.58in, dy: 4.48in)[
   #block(width: 6.90in)[
     #set par(leading: 0.72em)
-    #text(font: "Source Serif 4", size: 13.2pt, fill: rgb("#242424"))[
+    #text(font: "Source Serif 4", size: 30pt, fill: rgb("#242424"))[
       Estimating the energy use of closed AI model inference.
     ]
   ]
@@ -55,17 +55,15 @@ pagetitle: "CLEER Technical Report"
     #grid(
       columns: (1fr, 1fr, 1fr),
       gutter: 14pt,
-      [#text(font: "DM Mono", size: 6.5pt, fill: rgb("#4F747D"))[CLIENT]],
-      [#text(font: "DM Mono", size: 6.5pt, fill: rgb("#4F747D"))[VERSION]],
-      [#text(font: "DM Mono", size: 6.5pt, fill: rgb("#4F747D"))[DATE]],
+      [#text(font: "DM Mono", size: 9.5pt, fill: rgb("#4F747D"))[VERSION]],
+      [#text(font: "DM Mono", size: 9.5pt, fill: rgb("#4F747D"))[DATE]],
     )
     #v(5pt)
     #grid(
       columns: (1fr, 1fr, 1fr),
       gutter: 14pt,
-      [#text(font: "DM Mono", size: 9.2pt, weight: "medium", fill: rgb("#033845"))[DEMONSTRATION]],
-      [#text(font: "DM Mono", size: 9.2pt, weight: "medium", fill: rgb("#033845"))[0.1]],
-      [#text(font: "DM Mono", size: 9.2pt, weight: "medium", fill: rgb("#033845"))[31 AUGUST 2026]],
+      [#text(font: "DM Mono", size: 10.2pt, weight: "medium", fill: rgb("#033845"))[CLEER-TEXT-0826]],
+      [#text(font: "DM Mono", size: 10.2pt, weight: "medium", fill: rgb("#033845"))[29 SEPTEMBER 2026]],
     )
   ]
 ]
