@@ -1,5 +1,7 @@
 /* SAIG report web polish.
    Replace dashboardUrl / githubUrl here when a report is promoted from template to production. */
+const currentPdf = () => window.SAIG_REPORT_PDF || "index.pdf";
+
 (() => {
   const links = {
     dashboardUrl: "#",
