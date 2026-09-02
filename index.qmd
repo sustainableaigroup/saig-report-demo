@@ -1,18 +1,43 @@
 ---
-pagetitle: "CLEER Technical Report"
+pagetitle: "SAIG Technical Report"
+
+# TEMPLATE: update only this block for each new report.
+report:
+  type: "TECHNICAL REPORT"
+  title: "CLEER"
+  expansion: "Closed-model Latent Energy Estimation Range"
+  subtitle: "Estimating the energy use of closed AI model inference."
+  authors: "Nidhal Jegham, Chan Young Koh, Sasha Luccioni"
+  version: "CLEER-TEXT-0826"
+  date: "29 SEPTEMBER 2026"
 ---
 
 ```{=html}
 <div class="saig-cover">
-  <div>
+  <div class="saig-cover-top">
     <div class="saig-logo-card"><img src="assets/saig-logo.png" alt="Sustainable AI Group"></div>
-    <div class="saig-kicker" style="margin-top:3.2rem;">Technical Report</div>
-    <h1>CLEER<br>Technical Report</h1>
-    <div class="subtitle">Estimating the energy use of closed AI model inference.</div>
+
+    <div class="saig-kicker">{{< meta report.type >}}</div>
+    <h1>{{< meta report.title >}}</h1>
+    <div class="saig-expansion">[{{< meta report.expansion >}}]</div>
+    <div class="subtitle">{{< meta report.subtitle >}}</div>
+
     <a class="pdf-button" href="index.pdf" target="_blank" rel="noopener noreferrer">↓ Download PDF</a>
   </div>
-  <div class="saig-cover-meta">
-    <span>VERSION: 0826</span><span>29 SEPTEMBER 2026</span>
+
+  <div class="saig-cover-bottom">
+    <div class="saig-authors">By {{< meta report.authors >}}</div>
+
+    <div class="saig-cover-meta-card">
+      <div class="saig-meta-item">
+        <div class="saig-meta-label">VERSION</div>
+        <div class="saig-meta-value">{{< meta report.version >}}</div>
+      </div>
+      <div class="saig-meta-item">
+        <div class="saig-meta-label">DATE</div>
+        <div class="saig-meta-value">{{< meta report.date >}}</div>
+      </div>
+    </div>
   </div>
 </div>
 ```
@@ -31,22 +56,22 @@ pagetitle: "CLEER Technical Report"
 ]
 
 #place(top + left, dx: 0.58in, dy: 2.20in)[
-  #text(font: "DM Mono", size: 14pt, tracking: 0.8pt, fill: rgb("#242424"))[TECHNICAL REPORT]
+  #text(font: "DM Mono", size: 14pt, tracking: 0.8pt, fill: rgb("#242424"))[{{< meta report.type >}}]
 ]
 
 #place(top + left, dx: 0.58in, dy: 3.03in)[
-  #text(font: "Inter", size: 55pt, weight: "medium", fill: rgb("#B8663B"))[CLEER]
+  #text(font: "Inter", size: 55pt, weight: "medium", fill: rgb("#B8663B"))[{{< meta report.title >}}]
 ]
 
 #place(top + left, dx: 0.58in, dy: 3.9in)[
-  #text(font: "DM Mono", size: 18pt, tracking: 0.8pt, fill: rgb("#B8663B"))[[Closed-model Latent Energy Estimation Range]]
+  #text(font: "DM Mono", size: 18pt, tracking: 0.8pt, fill: rgb("#B8663B"))[[{{< meta report.expansion >}}]]
 ]
 
 #place(top + left, dx: 0.58in, dy: 4.8in)[
   #block(width: 6.90in)[
     #set par(leading: 0.72em)
     #text(font: "Source Serif 4", size: 26pt, fill: rgb("#242424"))[
-      Estimating the energy use of closed AI model inference.
+      {{< meta report.subtitle >}}
     ]
   ]
 ]
@@ -55,7 +80,7 @@ pagetitle: "CLEER Technical Report"
   #block(width: 6.90in)[
     #set par(leading: 0.72em)
     #text(font: "Source Serif 4", size: 14pt, fill: rgb("#242424"))[
-      By Nidhal Jegham, Chan Young Koh, Sasha Luccioni
+      By {{< meta report.authors >}}
     ]
   ]
 ]
@@ -72,8 +97,8 @@ pagetitle: "CLEER Technical Report"
     #grid(
       columns: (1fr, 1fr),
       gutter: 14pt,
-      [#text(font: "DM Mono", size: 11pt, weight: "medium", fill: rgb("#033845"))[CLEER-TEXT-0826]],
-      [#text(font: "DM Mono", size: 11pt, weight: "medium", fill: rgb("#033845"))[29 SEPTEMBER 2026]],
+      [#text(font: "DM Mono", size: 11pt, weight: "medium", fill: rgb("#033845"))[{{< meta report.version >}}]],
+      [#text(font: "DM Mono", size: 11pt, weight: "medium", fill: rgb("#033845"))[{{< meta report.date >}}]],
     )
   ]
 ]

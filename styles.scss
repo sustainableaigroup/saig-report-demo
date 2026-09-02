@@ -88,13 +88,18 @@ h3 {
   padding: clamp(2rem, 5vw, 4.5rem);
   position: relative;
   overflow: hidden;
-  background:
-    url("assets/pdf-cover-bg.png") left center/cover no-repeat;
+  background: url("assets/pdf-cover-bg.png") left center / cover no-repeat;
   box-shadow: 0 24px 70px rgba(3,56,69,.15);
-  color: --saig-charcoal;
+  color: var(--saig-charcoal);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.saig-cover-top,
+.saig-cover-bottom {
+  position: relative;
+  z-index: 1;
 }
 
 .saig-logo-card {
@@ -118,35 +123,83 @@ h3 {
   font-family: "DM Mono", monospace;
   text-transform: uppercase;
   letter-spacing: .09em;
-  font-size: .76rem;
+}
+
+.saig-cover .saig-kicker {
+  margin-top: 3.2rem;
+  color: var(--saig-charcoal);
+  font-size: clamp(.92rem, 1.15vw, 1.12rem);
+  line-height: 1.2;
 }
 
 .saig-cover h1 {
-  color: --saig-charcoal;
-  font-size: clamp(3rem, 4.6vw, 4.6rem);
-  line-height: 1.01;
+  color: var(--saig-orange);
+  font-size: clamp(3.4rem, 4.2vw, 4.65rem);
+  line-height: .98;
   max-width: 1050px;
-  margin: 4.25rem 0 1.25rem;
+  margin: 2.05rem 0 .7rem;
   letter-spacing: -.035em;
+}
+
+.saig-expansion {
+  font-family: "DM Mono", monospace;
+  color: var(--saig-orange);
+  font-size: clamp(1rem, 1.35vw, 1.35rem);
+  line-height: 1.3;
+  letter-spacing: .045em;
+  max-width: 980px;
+  margin-bottom: 1.7rem;
 }
 
 .saig-cover .subtitle {
   font-family: "Source Serif 4", Georgia, serif;
-  font-size: clamp(1.18rem, 1.8vw, 1.38rem);
-  line-height: 1.48;
-  max-width: 760px;
-  color: --saig-charcoal;
+  font-size: clamp(1.65rem, 2.25vw, 2.15rem);
+  line-height: 1.24;
+  max-width: 880px;
+  color: var(--saig-charcoal);
 }
 
-.saig-cover-meta {
-  display: flex;
-  gap: 1rem 2.5rem;
-  flex-wrap: wrap;
-  color: --saig-charcoal;
+.saig-cover-bottom {
+  margin-top: 4rem;
+}
+
+.saig-authors {
+  font-family: "Source Serif 4", Georgia, serif;
+  color: var(--saig-charcoal);
+  font-size: clamp(1rem, 1.15vw, 1.15rem);
+  line-height: 1.4;
+  margin-bottom: 1.35rem;
+}
+
+.saig-cover-meta-card {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 2rem;
+  max-width: 760px;
+  padding: 1rem 1.2rem;
+  background: rgba(255,255,255,.96);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.08);
+}
+
+.saig-meta-label,
+.saig-meta-value {
   font-family: "DM Mono", monospace;
-  font-size: .76rem;
+}
+
+.saig-meta-label {
+  color: var(--saig-muted);
+  font-size: .72rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: .35rem;
+}
+
+.saig-meta-value {
+  color: var(--saig-ocean);
+  font-size: .82rem;
+  font-weight: 500;
   letter-spacing: .02em;
-  margin-top: 3.5rem;
 }
 
 .pdf-button {
@@ -161,7 +214,7 @@ h3 {
   font-weight: 500;
   padding: .78rem 1rem;
   border-radius: 999px;
-  margin-top: 1.4rem;
+  margin-top: 1.55rem;
   width: fit-content;
   box-shadow: 0 8px 22px rgba(0,0,0,.12);
 }
@@ -368,28 +421,45 @@ main.content hr { border-color: var(--saig-mist); margin: 3rem 0; }
 
   .saig-logo-card img { width: min(285px, 70vw); max-width: 100%; }
 
-  .saig-kicker { margin-top: 2.5rem !important; font-size: .68rem; }
+  .saig-cover .saig-kicker {
+    margin-top: 2.5rem;
+    font-size: .78rem;
+  }
 
   .saig-cover h1 {
-    font-size: clamp(2.6rem, 12vw, 4.1rem);
-    line-height: 1.00;
-    margin: 2.6rem 0 1.05rem;
+    font-size: clamp(2.9rem, 12vw, 3.75rem);
+    line-height: .98;
+    margin: 1.8rem 0 .65rem;
+  }
+
+  .saig-expansion {
+    font-size: .88rem;
+    line-height: 1.35;
+    margin-bottom: 1.25rem;
   }
 
   .saig-cover .subtitle {
-    font-size: 1.08rem;
-    line-height: 1.46;
+    font-size: 1.35rem;
+    line-height: 1.3;
   }
 
-  .saig-cover-meta {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: .48rem;
-    margin-top: 2.6rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255,255,255,.28);
-    font-size: .70rem;
+  .saig-cover-bottom {
+    margin-top: 3rem;
   }
+
+  .saig-authors {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .saig-cover-meta-card {
+    grid-template-columns: 1fr 1fr;
+    gap: .8rem 1rem;
+    padding: .9rem 1rem;
+  }
+
+  .saig-meta-label { font-size: .64rem; }
+  .saig-meta-value { font-size: .74rem; }
 
   h1 { font-size: 2.3rem; }
   h2 { font-size: 1.55rem; margin-top: 3rem; }
@@ -410,6 +480,7 @@ main.content hr { border-color: var(--saig-mist); margin: 3rem 0; }
 
 @media (max-width: 430px) {
   .saig-cover { padding: 1.3rem; }
-  .saig-cover h1 { font-size: clamp(2.35rem, 11.5vw, 3.2rem); }
+  .saig-cover h1 { font-size: clamp(2.65rem, 12vw, 3.25rem); }
+  .saig-cover-meta-card { grid-template-columns: 1fr; }
   .pdf-button { width: 100%; justify-content: center; }
 }
