@@ -30,7 +30,7 @@
 
 #let saig-footer = context [
   #set text(font: "DM Mono", size: 6.5pt, fill: rgb("#819CA2"))
-  Sustainable AI Group
+  #link("https://sustainableaigroup.com/")[sustainableaigroup.com]
 ]
 
 #set page(
