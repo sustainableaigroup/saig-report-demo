@@ -39,10 +39,10 @@ pagetitle: "CLEER Technical Report"
 ]
 
 #place(top + left, dx: 0.58in, dy: 3.9in)[
-  #text(font: "DM Mono", size: 16pt, tracking: 0.8pt, fill: rgb("#B8663B"))[[Closed-model Latent Energy Estimation Range]]
+  #text(font: "DM Mono", size: 18pt, tracking: 0.8pt, fill: rgb("#B8663B"))[[Closed-model Latent Energy Estimation Range]]
 ]
 
-#place(top + left, dx: 0.58in, dy: 5in)[
+#place(top + left, dx: 0.58in, dy: 4.8in)[
   #block(width: 6.90in)[
     #set par(leading: 0.72em)
     #text(font: "Source Serif 4", size: 26pt, fill: rgb("#242424"))[
@@ -51,11 +51,11 @@ pagetitle: "CLEER Technical Report"
   ]
 ]
 
-#place(top + left, dx: 0.58in, dy: 8in)[
+#place(top + left, dx: 0.58in, dy: 8.5in)[
   #block(width: 6.90in)[
     #set par(leading: 0.72em)
     #text(font: "Source Serif 4", size: 14pt, fill: rgb("#242424"))[
-      By Nidhal Jegham, Chan Young koh, Sasha Luccioni
+      By Nidhal Jegham, Chan Young Koh, Sasha Luccioni
     ]
   ]
 ]
@@ -65,15 +65,15 @@ pagetitle: "CLEER Technical Report"
     #grid(
       columns: (1fr, 1fr),
       gutter: 14pt,
-      [#text(font: "DM Mono", size: 9.5pt, fill: rgb("#4F747D"))[VERSION]],
-      [#text(font: "DM Mono", size: 9.5pt, fill: rgb("#4F747D"))[DATE]],
+      [#text(font: "DM Mono", size: 10.5pt, fill: rgb("#4F747D"))[VERSION]],
+      [#text(font: "DM Mono", size: 10.5pt, fill: rgb("#4F747D"))[DATE]],
     )
     #v(5pt)
     #grid(
       columns: (1fr, 1fr),
       gutter: 14pt,
-      [#text(font: "DM Mono", size: 10.2pt, weight: "medium", fill: rgb("#033845"))[CLEER-TEXT-0826]],
-      [#text(font: "DM Mono", size: 10.2pt, weight: "medium", fill: rgb("#033845"))[29 SEPTEMBER 2026]],
+      [#text(font: "DM Mono", size: 11pt, weight: "medium", fill: rgb("#033845"))[CLEER-TEXT-0826]],
+      [#text(font: "DM Mono", size: 11pt, weight: "medium", fill: rgb("#033845"))[29 SEPTEMBER 2026]],
     )
   ]
 ]
