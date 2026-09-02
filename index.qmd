@@ -35,14 +35,14 @@ pagetitle: "CLEER Technical Report"
 ]
 
 #place(top + left, dx: 0.58in, dy: 3.03in)[
-  #text(font: "Inter", size: 55pt, weight: "medium", fill: rgb("#242424"))[CLEER]
+  #text(font: "Inter", size: 55pt, weight: "medium", fill: rgb("#B8663B"))[CLEER]
 ]
 
-#place(top + left, dx: 0.58in, dy: 3.3in)[
-  #text(font: "DM Mono", size: 16pt, tracking: 0.8pt, fill: rgb("#242424"))[[Closed-model Latent Energy Estimation Range]]
+#place(top + left, dx: 0.58in, dy: 3.9in)[
+  #text(font: "DM Mono", size: 16pt, tracking: 0.8pt, fill: rgb("#B8663B"))[[Closed-model Latent Energy Estimation Range]]
 ]
 
-#place(top + left, dx: 0.58in, dy: 4.48in)[
+#place(top + left, dx: 0.58in, dy: 5in)[
   #block(width: 6.90in)[
     #set par(leading: 0.72em)
     #text(font: "Source Serif 4", size: 26pt, fill: rgb("#242424"))[
@@ -51,7 +51,7 @@ pagetitle: "CLEER Technical Report"
   ]
 ]
 
-#place(top + left, dx: 0.58in, dy: 6.6in)[
+#place(top + left, dx: 0.58in, dy: 8in)[
   #block(width: 6.90in)[
     #set par(leading: 0.72em)
     #text(font: "Source Serif 4", size: 14pt, fill: rgb("#242424"))[
