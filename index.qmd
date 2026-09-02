@@ -16,6 +16,10 @@ format:
     output-file: "CLEER-TEXT-0826.pdf"
 ---
 
+<script>
+window.SAIG_REPORT_PDF = "{{< meta format.typst.output-file >}}";
+</script>
+
 ```{=html}
 <div class="saig-cover">
   <div class="saig-cover-top">
