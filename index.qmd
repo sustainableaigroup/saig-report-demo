@@ -10,6 +10,7 @@ report:
   authors: "Nidhal Jegham, Chan Young Koh, Sasha Luccioni"
   version: "CLEER-TEXT-0826"
   date: "29 SEPTEMBER 2026"
+  pdf-file: "CLEER-TEXT-0826.pdf"
 
 format:
   html: default
@@ -17,11 +18,9 @@ format:
     output-file: "CLEER-TEXT-0826.pdf"
 ---
 
-<script>
-window.SAIG_REPORT_PDF = "{{< meta format.typst.output-file >}}";
-</script>
 
 ```{=html}
+<div id="saig-pdf-file" hidden>{{< meta report.pdf-file >}}</div>
 <div class="saig-cover">
   <div class="saig-cover-top">
     <div class="saig-logo-card"><img src="assets/saig-logo.png" alt="Sustainable AI Group"></div>
@@ -31,7 +30,7 @@ window.SAIG_REPORT_PDF = "{{< meta format.typst.output-file >}}";
     <div class="saig-expansion">[{{< meta report.expansion >}}]</div>
     <div class="subtitle">{{< meta report.subtitle >}}</div>
 
-    <a class="pdf-button" href="{{< meta format.typst.output-file >}}" target="_blank" rel="noopener noreferrer">↓ Download PDF</a>
+    <a class="pdf-button saig-pdf-link" href="#" target="_blank" rel="noopener noreferrer">↓ Download PDF</a>
   </div>
 
   <div class="saig-cover-bottom">
