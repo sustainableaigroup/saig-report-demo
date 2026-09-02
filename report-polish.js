@@ -1,5 +1,6 @@
 /* SAIG report web polish.
-   Replace dashboardUrl / githubUrl here when a report is promoted from template to production. */
+   Replace dashboardUrl / githubUrl here when a report is promoted
+   from template to production. */
 
 (() => {
   const links = {
@@ -8,10 +9,22 @@
     contactUrl: "https://sustainableaigroup.com/"
   };
 
-  // PDF filename is supplied by index.qmd.
-  // Falls back to index.pdf if no custom filename is provided.
-  const currentPdf = () => window.SAIG_REPORT_PDF || "index.pdf";
+  // Read the report-specific PDF filename exposed by index.qmd.
+  const currentPdf = () => {
+    const source = document.getElementById("saig-pdf-file");
+    return source?.textContent?.trim() || "index.pdf";
+  };
 
+  // Set the PDF URL for buttons already present in index.qmd.
+  const wirePdfLinks = () => {
+    const pdf = currentPdf();
+
+    document.querySelectorAll(".saig-pdf-link").forEach((link) => {
+      link.setAttribute("href", pdf);
+    });
+  };
+
+  // Add the Resources section beneath the table of contents.
   const addResources = () => {
     const toc =
       document.querySelector("#TOC") ||
@@ -24,33 +37,46 @@
 
     block.innerHTML = `
       <div class="saig-resource-title">Resources</div>
+
       <a
         class="saig-resource-link saig-resource-primary"
         href="${currentPdf()}"
         target="_blank"
         rel="noopener noreferrer"
-      ><span aria-hidden="true">↓</span> Download PDF</a>
+      >
+        <span aria-hidden="true">↓</span> Download PDF
+      </a>
+
       <a
         class="saig-resource-link"
         href="${links.dashboardUrl}"
-      ><span aria-hidden="true">↗</span> Dashboard</a>
+      >
+        <span aria-hidden="true">↗</span> Dashboard
+      </a>
+
       <a
         class="saig-resource-link"
         href="${links.githubUrl}"
         target="_blank"
         rel="noopener"
-      ><span aria-hidden="true">↗</span> GitHub</a>
+      >
+        <span aria-hidden="true">↗</span> GitHub
+      </a>
+
       <a
         class="saig-resource-link"
         href="${links.contactUrl}"
         target="_blank"
         rel="noopener"
-      ><span aria-hidden="true">↗</span> Reach out to SAIG</a>
+      >
+        <span aria-hidden="true">↗</span> Reach out to SAIG
+      </a>
     `;
 
     toc.appendChild(block);
   };
 
+  // Add automatic SECTION / APPENDIX labels above H1 headings.
   const addEyebrows = () => {
     let auto = 0;
 
@@ -61,13 +87,17 @@
           heading.closest(".saig-cover") ||
           heading.id === "references" ||
           heading.id === "refs"
-        ) return;
+        ) {
+          return;
+        }
 
         if (
           heading.previousElementSibling?.classList?.contains(
             "chapter-eyebrow"
           )
-        ) return;
+        ) {
+          return;
+        }
 
         const title = heading.textContent.trim();
         const numeric = title.match(/^(\d+)\.?\s/);
@@ -78,7 +108,10 @@
         if (appendix) {
           label = `APPENDIX ${appendix[1].toUpperCase()}`;
         } else if (numeric) {
-          label = `SECTION ${String(Number(numeric[1])).padStart(2, "0")}`;
+          label = `SECTION ${String(Number(numeric[1])).padStart(
+            2,
+            "0"
+          )}`;
         } else {
           auto += 1;
           label = `SECTION ${String(auto).padStart(2, "0")}`;
@@ -92,6 +125,7 @@
       });
   };
 
+  // Apply branded styling hooks to Figure/Table caption labels.
   const brandCaptions = () => {
     document
       .querySelectorAll("figcaption, table caption")
@@ -100,6 +134,7 @@
 
         const nodes = Array.from(caption.childNodes);
         const text = caption.textContent || "";
+
         const match = text.match(
           /^\s*((?:Figure|Table)\s+\d+[:.]?)/i
         );
@@ -132,6 +167,7 @@
       });
   };
 
+  // Wrap wide tables so they scroll horizontally on small screens.
   const wrapTables = () => {
     document
       .querySelectorAll("main.content table")
@@ -140,7 +176,9 @@
           table.parentElement?.classList?.contains(
             "saig-table-scroll"
           )
-        ) return;
+        ) {
+          return;
+        }
 
         const wrapper = document.createElement("div");
         wrapper.className = "saig-table-scroll";
@@ -151,6 +189,7 @@
   };
 
   const init = () => {
+    wirePdfLinks();
     addResources();
     addEyebrows();
     brandCaptions();
